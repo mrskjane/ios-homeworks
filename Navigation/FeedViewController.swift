@@ -1,9 +1,3 @@
-//
-//  FeedViewController.swift
-//  Navigation
-//
-//  Created by Евгения Панфилова on 18.11.2025.
-//
 
 import UIKit
 
@@ -12,18 +6,23 @@ class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        title = "Лента"
+        view.backgroundColor = .systemBackground
+        
+        let button = UIButton(type: .system)
+        button.setTitle("Показать пост", for: .normal)
+        button.addTarget(self, action: #selector(showPost), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(button)
+        
+        NSLayoutConstraint.activate([
+                    button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                    button.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+                ])
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @objc func showPost() {
+        let post = Post(title: "Привет, это мой пост!")
+        let postVC = PostViewController(post: post)
+        navigationController?.pushViewController(postVC, animated: true)
     }
-    */
-
 }
