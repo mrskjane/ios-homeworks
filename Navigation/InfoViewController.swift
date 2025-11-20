@@ -1,46 +1,54 @@
-//
-//  InfoViewController.swift
-//  Navigation
-//
-//  Created by Евгения Панфилова on 18.11.2025.
-//
 
 import UIKit
 
 class InfoViewController: UIViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        title = "Информация"
-        view.backgroundColor = .systemBackground
-        
+    private lazy var showAlertButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Показать алерт", for: .normal)
-        button.addTarget(self, action: #selector(showAlert), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapShowAlertButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(button)
-        
+        return button
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+        setupLayout()
+    }
+    
+    private func setupView() {
+        title = "Информация"
+        view.backgroundColor = .systemBackground
+        view.addSubview(showAlertButton)
+    }
+    
+    private func setupLayout() {
         NSLayoutConstraint.activate([
-            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            button.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            showAlertButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            showAlertButton.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
-    @objc func showAlert() {
+    @objc func didTapShowAlertButton() {
+        let alert = makeAlertController()
+        present(alert, animated: true)
+    }
+    
+    private func makeAlertController() -> UIAlertController {
         let alert = UIAlertController(title: "Заголовок", message: "Это сообщение алерта.", preferredStyle: .alert)
         
-        let action1 = UIAlertAction(title: "Да", style: .default) { _ in
+        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
             print("Нажата кнопка: Да")
         }
         
-        let action2 = UIAlertAction(title: "Нет", style: .cancel) { _ in
+        let noAction = UIAlertAction(title: "Нет", style: .cancel) { _ in
             print("Нажата кнопка: Нет")
         }
         
-        alert.addAction(action1)
-        alert.addAction(action2)
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
         
-        present(alert, animated: true)
+        return alert
     }
 }

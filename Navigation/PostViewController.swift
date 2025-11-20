@@ -5,6 +5,11 @@ class PostViewController: UIViewController {
     
     let post: Post
     
+    private lazy var infoBarButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(title: "Инфо", style: .plain, target: self, action: #selector(didTapInfoButton))
+        return button
+    }()
+    
     init(post: Post) {
         self.post = post
         super.init(nibName: nil, bundle: nil)
@@ -16,14 +21,20 @@ class PostViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupView()
+        setupNavigation()
+    }
+    
+    private func setupView() {
         title = post.title
         view.backgroundColor = .systemTeal
-        
-        let infoButton = UIBarButtonItem(title: "Инфо", style: .plain, target: self, action: #selector(showInfo))
-        navigationItem.rightBarButtonItem = infoButton
     }
-    @objc func showInfo() {
+    
+    private func setupNavigation() {
+        navigationItem.rightBarButtonItem = infoBarButton
+    }
+    
+    @objc func didTapInfoButton() {
         let infoVC = InfoViewController()
         infoVC.modalPresentationStyle = .pageSheet
         present(infoVC, animated: true)

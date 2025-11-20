@@ -2,25 +2,35 @@
 import UIKit
 
 class FeedViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        title = "Лента"
-        view.backgroundColor = .systemBackground
-        
+    
+    private lazy var showPostButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Показать пост", for: .normal)
-        button.addTarget(self, action: #selector(showPost), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapShowPostButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(button)
-        
-        NSLayoutConstraint.activate([
-                    button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                    button.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-                ])
+        return button
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+        setupLayout()
     }
-    @objc func showPost() {
+    
+    private func setupView() {
+        title = "Лента"
+        view.backgroundColor = .systemBackground
+        view.addSubview(showPostButton)
+    }
+    
+    private func setupLayout() {
+        NSLayoutConstraint.activate([
+            showPostButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            showPostButton.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
+    @objc func didTapShowPostButton() {
         let post = Post(title: "Привет, это мой пост!")
         let postVC = PostViewController(post: post)
         navigationController?.pushViewController(postVC, animated: true)
