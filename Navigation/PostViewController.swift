@@ -3,10 +3,11 @@ import UIKit
 
 class PostViewController: UIViewController {
     
-    let post: Post
+    private let post: Post
     
     private lazy var infoBarButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: "Инфо", style: .plain, target: self, action: #selector(didTapInfoButton))
+        button.width = 50
         return button
     }()
     
@@ -22,7 +23,7 @@ class PostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupNavigation()
+        setupNavigationBar()
     }
     
     private func setupView() {
@@ -30,11 +31,17 @@ class PostViewController: UIViewController {
         view.backgroundColor = .systemTeal
     }
     
-    private func setupNavigation() {
-        navigationItem.rightBarButtonItem = infoBarButton
+    private func setupNavigationBar() {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "info.circle"), for: .normal)
+        button.tintColor = .label
+        button.addTarget(self, action: #selector(didTapInfoButton), for: .touchUpInside)
+        
+        let infoButton = UIBarButtonItem(customView: button)
+        navigationItem.rightBarButtonItem = infoButton
     }
     
-    @objc func didTapInfoButton() {
+    @objc private func didTapInfoButton() {
         let infoVC = InfoViewController()
         infoVC.modalPresentationStyle = .pageSheet
         present(infoVC, animated: true)
