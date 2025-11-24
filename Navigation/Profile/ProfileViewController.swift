@@ -15,6 +15,12 @@ class ProfileViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        headerView.frame = view.bounds
+        let insets = view.safeAreaInsets
+        headerView.frame = CGRect(
+            x: 0,
+            y: insets.top,
+            width: view.bounds.width,
+            height: view.bounds.height - insets.top - insets.bottom
+        )
     }
 }
