@@ -90,7 +90,13 @@ class ProfileHeaderView: UIView {
         addSubview(statusTextField)
         addSubview(setStatusButton)
         
+        statusTextField.addTarget(self, action: #selector(statusTextChanged(_:)), for: .editingChanged)
+        
         setStatusButton.addTarget(self, action: #selector(didTapSetStatusButton), for: .touchUpInside)
+    }
+    
+    @objc private func statusTextChanged(_ textField: UITextField) {
+        statusText = textField.text ?? ""
     }
     
     @objc private func didTapSetStatusButton() {
