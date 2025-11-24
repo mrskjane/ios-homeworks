@@ -81,14 +81,6 @@ class ProfileHeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setOnStatusUpdate(_ handler: @escaping (String) -> Void) {
-        setStatusButton.removeTarget(nil, action: nil, for: .allEvents)
-        setStatusButton.addTarget(self, action: #selector(didTapSetStatusButton), for: .touchUpInside)
-        self.statusUpdateHandler = handler
-    }
-    
-    private var statusUpdateHandler: ((String) -> Void)?
-    
     private func setupViews() {
         backgroundColor = .lightGray
         
@@ -107,7 +99,6 @@ class ProfileHeaderView: UIView {
             statusText = newStatus
             currentStatusLabel.text = statusText
             statusTextField.text = "" // очистить поле после установки
-            statusUpdateHandler?(statusText)
             print("Статус установлен: \(statusText)")
         } else {
             print("Поле пустое — статус не изменён")
@@ -138,7 +129,7 @@ class ProfileHeaderView: UIView {
         // Поле ввода — под меткой, отступ 16pt, ширина как у метки
         let textFieldY = currentStatusY + currentStatusLabel.frame.height + 16
         statusTextField.frame = CGRect(
-            x: textX,                          // выравнивание по тексту (не по краю экрана!)
+            x: textX,
             y: textFieldY,
             width: currentStatusLabel.frame.width, // ширина как у надписи
             height: 40
