@@ -16,11 +16,12 @@ class FeedViewController: UIViewController {
     
     private let firstButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Показать пост", for: .normal)
+        button.setTitle("Показать первый пост", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .systemIndigo
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 8
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
@@ -28,11 +29,12 @@ class FeedViewController: UIViewController {
     
     private let secondButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Показать пост", for: .normal)
+        button.setTitle("Показать второй пост", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .systemIndigo
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 8
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
@@ -40,8 +42,10 @@ class FeedViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupView()
         setupStackView()
+        setupActions()
         setupLayout()
     }
     
@@ -52,6 +56,7 @@ class FeedViewController: UIViewController {
     
     private func setupView() {
         title = "Лента"
+        view.addSubview(stackView)
         view.backgroundColor = .systemBackground
     }
     
@@ -62,8 +67,19 @@ class FeedViewController: UIViewController {
         ])
     }
     
-    @objc func didTapShowPostButton() {
-        let post = Post(title: "Привет, это мой пост!")
+    private func setupActions() {
+        firstButton.addTarget(self, action: #selector(didTapFirstButton), for: .touchUpInside)
+        secondButton.addTarget(self, action: #selector(didTapSecondButton), for: .touchUpInside)
+    }
+    
+    @objc func didTapFirstButton() {
+        let post = Post(title: "Привет, это мой первый пост!")
+        let postVC = PostViewController(post: post)
+        navigationController?.pushViewController(postVC, animated: true)
+    }
+    
+    @objc func didTapSecondButton() {
+        let post = Post(title: "Привет, а это мой второй пост!")
         let postVC = PostViewController(post: post)
         navigationController?.pushViewController(postVC, animated: true)
     }
