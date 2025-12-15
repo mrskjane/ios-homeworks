@@ -73,14 +73,14 @@ class FeedViewController: UIViewController {
     }
     
     @objc func didTapFirstButton() {
-        let post = Post(title: "Привет, это мой первый пост!")
-        let postVC = PostViewController(post: post)
-        navigationController?.pushViewController(postVC, animated: true)
+//        let post = Post(title: "Привет, это мой первый пост!")
+//        let postVC = PostViewController(post: post)
+//        navigationController?.pushViewController(postVC, animated: true)
     }
     
     @objc func didTapSecondButton() {
-        let post = Post(title: "Привет, а это мой второй пост!")
-        let postVC = PostViewController(post: post)
-        navigationController?.pushViewController(postVC, animated: true)
+//        let post = Post(title: "Привет, а это мой второй пост!")
+//        let postVC = PostViewController(post: post)
+//        navigationController?.pushViewController(postVC, animated: true)
     }
 }

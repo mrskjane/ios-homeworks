@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5C24892D2EE33EC50013D761 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C24892C2EE33EC50013D761 /* LogInViewController.swift */; };
+		5C59387B2EED36D000C6E92B /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C59387A2EED36D000C6E92B /* PostTableViewCell.swift */; };
 		5CF871AD2ED1E479001EE926 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CF871A32ED1E479001EE926 /* Assets.xcassets */; };
 		5CF871AF2ED1E479001EE926 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CF871A82ED1E479001EE926 /* LaunchScreen.storyboard */; };
 		5CF871B02ED1E479001EE926 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF8719F2ED1E479001EE926 /* ProfileHeaderView.swift */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		5C24892C2EE33EC50013D761 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		5C27B8552ECB32DD00D965C4 /* Navigation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Navigation.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C59387A2EED36D000C6E92B /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		5CF8719F2ED1E479001EE926 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		5CF871A02ED1E479001EE926 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		5CF871A22ED1E479001EE926 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				5CF871A92ED1E479001EE926 /* Post.swift */,
 				5CF871AA2ED1E479001EE926 /* PostViewController.swift */,
 				5CF871AB2ED1E479001EE926 /* SceneDelegate.swift */,
+				5C59387A2EED36D000C6E92B /* PostTableViewCell.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -170,6 +173,7 @@
 				5CF871B32ED1E479001EE926 /* FeedViewController.swift in Sources */,
 				5CF871B42ED1E479001EE926 /* InfoViewController.swift in Sources */,
 				5CF871B52ED1E479001EE926 /* Post.swift in Sources */,
+				5C59387B2EED36D000C6E92B /* PostTableViewCell.swift in Sources */,
 				5CF871B62ED1E479001EE926 /* PostViewController.swift in Sources */,
 				5CF871B72ED1E479001EE926 /* SceneDelegate.swift in Sources */,
 			);
