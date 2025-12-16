@@ -23,15 +23,18 @@ class LogInViewController: UIViewController {
         return imageView
     }()
     
-    private let textFieldsContainer: UIView = {
-        let view = UIView()
-        view.layer.borderColor = UIColor.lightGray.cgColor
-        view.layer.borderWidth = 0.5
-        view.layer.cornerRadius = 10
-        view.backgroundColor = .systemGray6
-        view.clipsToBounds = true // обрезаем внутренние элементы по скругленным углам
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+    private lazy var stackView: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [loginTextField, separatorView, passwordTextField])
+        stack.axis = .vertical
+        stack.spacing = 0
+        stack.distribution = .fillProportionally
+        stack.layer.borderColor = UIColor.lightGray.cgColor
+        stack.layer.borderWidth = 0.5
+        stack.layer.cornerRadius = 10
+        stack.backgroundColor = .systemGray6
+        stack.clipsToBounds = true
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }()
     
     private let loginTextField: UITextField = {
@@ -65,6 +68,7 @@ class LogInViewController: UIViewController {
     private let separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .lightGray
+        view.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -116,12 +120,8 @@ class LogInViewController: UIViewController {
         scrollView.addSubview(contentView)
         
         contentView.addSubview(vkLogoImageView)
-        contentView.addSubview(textFieldsContainer)
+        contentView.addSubview(stackView)
         contentView.addSubview(logInButton)
-        
-        textFieldsContainer.addSubview(loginTextField)
-        textFieldsContainer.addSubview(passwordTextField)
-        textFieldsContainer.addSubview(separatorView)
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -142,32 +142,14 @@ class LogInViewController: UIViewController {
             vkLogoImageView.widthAnchor.constraint(equalToConstant: 100),
             vkLogoImageView.heightAnchor.constraint(equalToConstant: 100),
             
-            // контейнер полей: под логотипом, отступ 120pt
-            textFieldsContainer.topAnchor.constraint(equalTo: vkLogoImageView.bottomAnchor, constant: 120),
-            textFieldsContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            textFieldsContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            textFieldsContainer.heightAnchor.constraint(equalToConstant: 100), // 50 + 50
-            
-            // поле логина (внутри контейнера)
-            loginTextField.topAnchor.constraint(equalTo: textFieldsContainer.topAnchor),
-            loginTextField.leadingAnchor.constraint(equalTo: textFieldsContainer.leadingAnchor),
-            loginTextField.trailingAnchor.constraint(equalTo: textFieldsContainer.trailingAnchor),
-            loginTextField.heightAnchor.constraint(equalToConstant: 50),
-            
-            // поле пароля (внутри контейнера)
-            passwordTextField.bottomAnchor.constraint(equalTo: textFieldsContainer.bottomAnchor),
-            passwordTextField.leadingAnchor.constraint(equalTo: textFieldsContainer.leadingAnchor),
-            passwordTextField.trailingAnchor.constraint(equalTo: textFieldsContainer.trailingAnchor),
-            passwordTextField.heightAnchor.constraint(equalToConstant: 50),
-            
-            // разделитель (внутри контейнера)
-            separatorView.centerYAnchor.constraint(equalTo: textFieldsContainer.centerYAnchor),
-            separatorView.leadingAnchor.constraint(equalTo: textFieldsContainer.leadingAnchor),
-            separatorView.trailingAnchor.constraint(equalTo: textFieldsContainer.trailingAnchor),
-            separatorView.heightAnchor.constraint(equalToConstant: 0.5),
-            
-            // кнопка Log In: под контейнером, отступ 16pt
-            logInButton.topAnchor.constraint(equalTo: textFieldsContainer.bottomAnchor, constant: 16),
+            // stackView под логотипом, отступ 120pt
+            stackView.topAnchor.constraint(equalTo: vkLogoImageView.bottomAnchor, constant: 120),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            stackView.heightAnchor.constraint(equalToConstant: 100), // высота всего stackView
+
+            // кнопка Log In: под stackView, отступ 16pt
+            logInButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 16),
             logInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             logInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             logInButton.heightAnchor.constraint(equalToConstant: 50),
