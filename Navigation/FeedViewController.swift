@@ -15,26 +15,26 @@ class FeedViewController: UIViewController {
     }()
     
     private let firstButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Показать первый пост", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.backgroundColor = .systemIndigo
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 8
-        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        var config = UIButton.Configuration.filled()
+        config.title = "Показать первый пост"
+        config.attributedTitle?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        config.baseBackgroundColor = .systemIndigo
+        config.cornerStyle = .medium
+        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+        let button = UIButton(configuration: config)
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
     }()
     
     private let secondButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Показать второй пост", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.backgroundColor = .systemIndigo
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 8
-        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        var config = UIButton.Configuration.filled()
+        config.title = "Показать второй пост"
+        config.attributedTitle?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        config.baseBackgroundColor = .systemIndigo
+        config.cornerStyle = .medium
+        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+        let button = UIButton(configuration: config)
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
