@@ -43,7 +43,6 @@ class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupView()
         setupStackView()
         setupActions()
         setupLayout()
@@ -54,13 +53,11 @@ class FeedViewController: UIViewController {
         stackView.addArrangedSubview(secondButton)
     }
     
-    private func setupView() {
+    private func setupLayout() {
         title = "Лента"
         view.addSubview(stackView)
         view.backgroundColor = .systemBackground
-    }
     
-    private func setupLayout() {
         NSLayoutConstraint.activate([
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
@@ -73,14 +70,14 @@ class FeedViewController: UIViewController {
     }
     
     @objc func didTapFirstButton() {
-//        let post = Post(title: "Привет, это мой первый пост!")
-//        let postVC = PostViewController(post: post)
-//        navigationController?.pushViewController(postVC, animated: true)
+        let post = Post(author: "Jane", description: "Это мой первый пост!", image: "post_image_1", likes: 30, views: 30)
+        let postVC = PostViewController(post: post)
+        navigationController?.pushViewController(postVC, animated: true)
     }
     
     @objc func didTapSecondButton() {
-//        let post = Post(title: "Привет, а это мой второй пост!")
-//        let postVC = PostViewController(post: post)
-//        navigationController?.pushViewController(postVC, animated: true)
+        let post = Post(author: "Jane", description: "Это мой второй пост!", image: "post_image_1", likes: 30, views: 30)
+        let postVC = PostViewController(post: post)
+        navigationController?.pushViewController(postVC, animated: true)
     }
 }

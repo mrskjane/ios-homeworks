@@ -13,17 +13,14 @@ class InfoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
         setupLayout()
     }
     
-    private func setupView() {
+    private func setupLayout() {
         title = "Информация"
         view.backgroundColor = .systemBackground
         view.addSubview(showAlertButton)
-    }
     
-    private func setupLayout() {
         NSLayoutConstraint.activate([
             showAlertButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             showAlertButton.centerYAnchor.constraint(equalTo: view.centerYAnchor)

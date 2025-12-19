@@ -79,7 +79,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        setupViews()
+        setupLayout()
         setupConstraints()
     }
     
@@ -87,7 +87,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupViews() {
+    private func setupLayout() {
         backgroundColor = .lightGray
         
         contentView.addSubview(avatarImageView)
