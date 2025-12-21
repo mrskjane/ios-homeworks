@@ -16,7 +16,7 @@ class PostTableViewCell: UITableViewCell {
 // изображение поста
     private let postImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .black
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
