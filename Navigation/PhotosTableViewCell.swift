@@ -30,6 +30,23 @@ class PhotosTableViewCell: UITableViewCell {
         return stackView
     }()
     
+    private let previewImages: [UIImageView] = {
+        var images = [UIImageView]()
+        let imageNames = ["image_1", "image_2", "image_3", "image_4", "image_5"]
+        
+        for name in imageNames {
+            let imageView = UIImageView()
+            imageView.image = UIImage(named: name)
+            imageView.backgroundColor = .black
+            imageView.contentMode = .scaleAspectFill
+            imageView.clipsToBounds = true
+            imageView.layer.cornerRadius = 6
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            images.append(imageView)
+        }
+        return images
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
@@ -44,8 +61,30 @@ class PhotosTableViewCell: UITableViewCell {
         contentView.addSubview(arrowImageView)
         contentView.addSubview(photosStackView)
         
+        // добавляем картинки в стэк
+        for image in previewImages {
+            photosStackView.addArrangedSubview(image)
+        }
+        
         NSLayoutConstraint.activate([
-            photosLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            // заголовок
+            photosLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            photosLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            
+            // стрелка
+            arrowImageView.centerYAnchor.constraint(equalTo: photosLabel.centerYAnchor),
+            arrowImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            arrowImageView.heightAnchor.constraint(equalToConstant: 24),
+            arrowImageView.widthAnchor.constraint(equalToConstant: 24),
+            
+            // стек фото
+            photosStackView.topAnchor.constraint(equalTo: photosLabel.bottomAnchor, constant: 12),
+            photosStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            photosStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            photosStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
+            // высота картинок автоматически: ширина экрана - отступы / 4
+            photosStackView.heightAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 48) / 4)
+        ])
     }
     
 }
