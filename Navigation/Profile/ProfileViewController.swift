@@ -5,20 +5,23 @@ class ProfileViewController: UIViewController {
     
     private let profileHeaderView = ProfileHeaderView()
     
-    // массив с постами
-    private let posts: [Post] = [
-        Post(author: "Mrs_Jane", description: "Незабываемый вид на горы...Просто нет слов", image: "post_image_1", likes: 522, views: 1256),
-        Post(author: "Foddie_Jane", description: "Сегодня приготовила хлеб на закваске...Впервые. Получилось невероятно вкусно!", image: "post_image_2", likes: 346, views: 1200),
-        Post(author: "Mrs_Jane", description: "Новый год всей семьей. Что может быть лучше?!", image: "post_image_3", likes: 167, views: 768)
-    ]
- 
+    private let posts: [Post]
+    
+    init(posts: [Post]) {
+        self.posts = posts
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // создаем таблицу
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .systemGray6
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: "PostCell")
-        tableView.register(ProfileHeaderView.self, forHeaderFooterViewReuseIdentifier: "ProfileHeader")
         
         return tableView
     }()
@@ -71,16 +74,12 @@ extension ProfileViewController: UITableViewDataSource {
 }
 
 extension ProfileViewController: UITableViewDelegate {
- 
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section == 0 else { return nil }
-        
-        // Получаем наш хедер из "пула" таблицы
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "ProfileHeader") as? ProfileHeaderView else {
-            return nil
+        if section == 0 {
+            return profileHeaderView
         }
-        
-        return headerView
+        return nil
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
