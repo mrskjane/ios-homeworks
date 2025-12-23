@@ -76,8 +76,9 @@ class PostTableViewCell: UITableViewCell {
             authorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             authorLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             
-            // postImageView под автором отступ 16, растягиваем на всю ширину, высота равна ширине
-            postImageView.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: padding),
+            
+            // postImageView под автором 
+            postImageView.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: 12),
             postImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             postImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             postImageView.heightAnchor.constraint(equalTo: postImageView.widthAnchor),
