@@ -32,7 +32,7 @@ class PhotosTableViewCell: UITableViewCell {
     
     private let previewImages: [UIImageView] = {
         var images = [UIImageView]()
-        let imageNames = ["image_1", "image_2", "image_3", "image_4", "image_5"]
+        let imageNames = ["Image_1", "Image_2", "Image_3", "Image_4"]
         
         for name in imageNames {
             let imageView = UIImageView()
@@ -42,6 +42,7 @@ class PhotosTableViewCell: UITableViewCell {
             imageView.clipsToBounds = true
             imageView.layer.cornerRadius = 6
             imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1.0).isActive = true
             images.append(imageView)
         }
         return images
@@ -82,8 +83,6 @@ class PhotosTableViewCell: UITableViewCell {
             photosStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             photosStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             photosStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
-            // высота картинок автоматически: ширина экрана - отступы / 4
-            photosStackView.heightAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width - 48) / 4)
         ])
     }
     
