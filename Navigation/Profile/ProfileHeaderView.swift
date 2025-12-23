@@ -130,9 +130,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
             setStatusButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
             setStatusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
             setStatusButton.heightAnchor.constraint(equalToConstant: 44),
-            
-            //Нижний отступ
-            bottomAnchor.constraint(greaterThanOrEqualTo: setStatusButton.bottomAnchor, constant: 16)
+            setStatusButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
     }
     
