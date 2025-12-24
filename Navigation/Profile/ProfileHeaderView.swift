@@ -1,6 +1,6 @@
 import UIKit
 
-class ProfileHeaderView: UIView {
+class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private let avatarImageView: UIImageView = {
         let imageView = UIImageView()
@@ -77,9 +77,9 @@ class ProfileHeaderView: UIView {
     
     private var statusText: String = "Listening to music"
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        setupLayout()
         setupConstraints()
     }
     
@@ -87,14 +87,14 @@ class ProfileHeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupViews() {
+    private func setupLayout() {
         backgroundColor = .lightGray
         
-        addSubview(avatarImageView)
-        addSubview(nameLabel)
-        addSubview(currentStatusLabel)
-        addSubview(statusTextField)
-        addSubview(setStatusButton)
+        contentView.addSubview(avatarImageView)
+        contentView.addSubview(nameLabel)
+        contentView.addSubview(currentStatusLabel)
+        contentView.addSubview(statusTextField)
+        contentView.addSubview(setStatusButton)
         
         statusTextField.addTarget(self, action: #selector(statusTextChanged(_:)), for: .editingChanged)
         
@@ -104,8 +104,8 @@ class ProfileHeaderView: UIView {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             //Аватарка: отступ 12pt сверху и слева
-            avatarImageView.topAnchor.constraint(equalTo: topAnchor, constant: 12),
-            avatarImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+            avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            avatarImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             avatarImageView.widthAnchor.constraint(equalToConstant: 100),
             avatarImageView.heightAnchor.constraint(equalToConstant: 100),
             
@@ -130,9 +130,7 @@ class ProfileHeaderView: UIView {
             setStatusButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
             setStatusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
             setStatusButton.heightAnchor.constraint(equalToConstant: 44),
-            
-            //Нижний отступ
-            bottomAnchor.constraint(greaterThanOrEqualTo: setStatusButton.bottomAnchor, constant: 16)
+            setStatusButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
     }
     

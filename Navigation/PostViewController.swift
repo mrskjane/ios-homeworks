@@ -27,7 +27,6 @@ class PostViewController: UIViewController {
     }
     
     private func setupView() {
-        title = post.title
         view.backgroundColor = .systemTeal
     }
     
