@@ -80,7 +80,6 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         setupLayout()
-        setupConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -99,9 +98,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         statusTextField.addTarget(self, action: #selector(statusTextChanged(_:)), for: .editingChanged)
         
         setStatusButton.addTarget(self, action: #selector(didTapSetStatusButton), for: .touchUpInside)
-    }
     
-    private func setupConstraints() {
         NSLayoutConstraint.activate([
             //Аватарка: отступ 12pt сверху и слева
             avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),

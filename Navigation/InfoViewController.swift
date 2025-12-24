@@ -13,12 +13,16 @@ class InfoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
         setupLayout()
     }
     
-    private func setupLayout() {
+    private func setupView() {
         title = "Информация"
         view.backgroundColor = .systemBackground
+    }
+    
+    private func setupLayout() {
         view.addSubview(showAlertButton)
     
         NSLayoutConstraint.activate([

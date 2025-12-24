@@ -22,6 +22,7 @@ class ProfileViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .systemGray6
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: "PostCell")
+        tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: "PhotosCell")
         
         return tableView
     }()
@@ -55,18 +56,25 @@ extension ProfileViewController: UITableViewDataSource {
     
     // количество секций в таблице
     func numberOfSections(in tableView: UITableView) -> Int {
-        1
+        2
     }
     
     // количество ячеек
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return 1
+        }
         return posts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as? PostTableViewCell else {
-            return UITableViewCell()
+        // логика лоя секции 0
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PhotosCell", for: indexPath) as! PhotosTableViewCell
+            return cell
         }
+        // логика для секции 1 (Посты)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostTableViewCell
         let post = posts[indexPath.row]
         cell.configure(with: post)
         return cell
@@ -83,6 +91,30 @@ extension ProfileViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 220
+        if section == 0 {
+            return 220
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+           return nil
+       }
+       
+       func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+           // чтобы убрать серый отступ
+           return 0
+       }
+    
+    // обработка нажатия на ячейку
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // снимаем выделение (серый фон)
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        // если нажали на секцию 0, то идем в Галерею
+        if indexPath.section == 0 {
+            let photosVC = PhotosViewController()
+            navigationController?.pushViewController(photosVC, animated: true)
+        }
     }
 }

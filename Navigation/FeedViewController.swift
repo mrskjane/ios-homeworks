@@ -45,6 +45,7 @@ class FeedViewController: UIViewController {
         
         setupStackView()
         setupActions()
+        setupView()
         setupLayout()
     }
     
@@ -53,10 +54,13 @@ class FeedViewController: UIViewController {
         stackView.addArrangedSubview(secondButton)
     }
     
-    private func setupLayout() {
+    private func setupView() {
         title = "Лента"
         view.addSubview(stackView)
         view.backgroundColor = .systemBackground
+    }
+    
+    private func setupLayout() {
     
         NSLayoutConstraint.activate([
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
