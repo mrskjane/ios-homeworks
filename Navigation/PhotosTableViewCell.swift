@@ -3,6 +3,8 @@ import UIKit
 
 class PhotosTableViewCell: UITableViewCell {
     
+    var onArrowTap: (() -> Void)?
+    
     private let photosLabel: UILabel = {
         let label = UILabel()
         label.text = "Photos"
@@ -18,6 +20,7 @@ class PhotosTableViewCell: UITableViewCell {
         imageView.image = UIImage(systemName: "arrow.right")
         imageView.tintColor = .black
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
     
@@ -51,6 +54,7 @@ class PhotosTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
+        setupGesture()
     }
     
     required init?(coder: NSCoder) {
@@ -86,4 +90,12 @@ class PhotosTableViewCell: UITableViewCell {
         ])
     }
     
+    private func setupGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(arrowTapped))
+        arrowImageView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func arrowTapped() {
+        onArrowTap?()
+    }
 }

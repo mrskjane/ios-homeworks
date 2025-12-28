@@ -71,6 +71,11 @@ extension ProfileViewController: UITableViewDataSource {
         // логика лоя секции 0
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "PhotosCell", for: indexPath) as! PhotosTableViewCell
+            cell.onArrowTap = { [weak self] in
+                let photos = Photo.makeMockPhotos()
+                let photoVC = PhotosViewController(photos: photos)
+                self?.navigationController?.pushViewController(photoVC, animated: true)
+            }
             return cell
         }
         // логика для секции 1 (Посты)
@@ -110,11 +115,5 @@ extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // снимаем выделение (серый фон)
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        // если нажали на секцию 0, то идем в Галерею
-        if indexPath.section == 0 {
-            let photosVC = PhotosViewController()
-            navigationController?.pushViewController(photosVC, animated: true)
-        }
     }
 }
