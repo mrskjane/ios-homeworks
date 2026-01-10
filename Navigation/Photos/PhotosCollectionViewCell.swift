@@ -6,7 +6,7 @@ class PhotosCollectionViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
         return imageView
     }()
     
@@ -20,7 +20,7 @@ class PhotosCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupLayout() {
-        contentView.addSubview(photoImageView)
+        contentView.addSubviews([photoImageView])
         NSLayoutConstraint.activate([
             photoImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             photoImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
