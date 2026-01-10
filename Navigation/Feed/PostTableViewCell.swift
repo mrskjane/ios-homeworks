@@ -9,7 +9,7 @@ class PostTableViewCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textColor = .black
         label.numberOfLines = 2
-        label.translatesAutoresizingMaskIntoConstraints = false
+        
         return label
     }()
     
@@ -19,7 +19,7 @@ class PostTableViewCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .black
         imageView.clipsToBounds = true
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
         return imageView
     }()
     
@@ -29,7 +29,7 @@ class PostTableViewCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textColor = .systemGray
         label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
+        
         return label
     }()
     
@@ -38,7 +38,7 @@ class PostTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
+        
         return label
     }()
 
@@ -47,7 +47,7 @@ class PostTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
+        
         return label
     }()
     
@@ -61,11 +61,7 @@ class PostTableViewCell: UITableViewCell {
     }
     
     private func setupLayout() {
-        contentView.addSubview(authorLabel)
-        contentView.addSubview(postImageView)
-        contentView.addSubview(descriptionLabel)
-        contentView.addSubview(likesLabel)
-        contentView.addSubview(viewsLabel)
+        contentView.addSubviews([authorLabel, authorLabel, postImageView, descriptionLabel, likesLabel, viewsLabel])
         
         let padding: CGFloat = 16.0
         
