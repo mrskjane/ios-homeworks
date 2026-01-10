@@ -1,7 +1,7 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, UITableViewDelegate {
     
     private let profileHeaderView = ProfileHeaderView()
     
@@ -60,45 +60,50 @@ extension ProfileViewController: UITableViewDataSource {
     
     // количество ячеек
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
+        switch section {
+        case 0:
             return 1
+        default:
+            return posts.count
+            
         }
-        return posts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // логика лоя секции 0
-        if indexPath.section == 0 {
+        switch indexPath.section {
+        case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: PhotosTableViewCell.id, for: indexPath) as! PhotosTableViewCell
-//            cell.setup { [weak self] in
-//                let photos = Photo.makeMockPhotos()
-//                let photoVC = PhotosViewController(photos: photos)
-//            }
             cell.setup(delegate: self)
             return cell
+        default:
+            // логика для секции 1 (Посты)
+            let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.id, for: indexPath) as! PostTableViewCell
+            let post = posts[indexPath.row]
+            cell.configure(with: post)
+            return cell
         }
-        // логика для секции 1 (Посты)
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostTableViewCell
-        let post = posts[indexPath.row]
-        cell.configure(with: post)
-        return cell
     }
 }
 
-extension ProfileViewController: UITableViewDelegate {
+extension ProfileViewController {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
+        switch section {
+        case 0:
             return profileHeaderView
+        default:
+            return nil
         }
-        return nil
     }
-    
+        
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
+        switch section {
+        case 0:
             return 220
+        default:
+            return 0
         }
-        return 0
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {

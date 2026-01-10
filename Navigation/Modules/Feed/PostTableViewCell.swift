@@ -2,6 +2,8 @@
 import UIKit
 
 class PostTableViewCell: UITableViewCell {
+    
+    static var id = "PostCell"
 
 // автор поста
     private let authorLabel: UILabel = {

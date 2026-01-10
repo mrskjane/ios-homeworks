@@ -7,8 +7,6 @@ protocol PhotoTableViewCellDelegate: AnyObject {
 
 class PhotosTableViewCell: UITableViewCell {
     
-//    private var arrowTapHandler: (() -> Void)?
-    
     private weak var delegate: PhotoTableViewCellDelegate?
     
     static var id = "PhotosTableViewCell"
@@ -68,10 +66,6 @@ class PhotosTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    func setup(arrowTapHandler: @escaping () -> Void) {
-//        //self.arrowTapHandler = arrowTapHandler
-//    }
-    
     func setup(delegate: PhotoTableViewCellDelegate) {
         self.delegate = delegate
     }
@@ -109,7 +103,6 @@ class PhotosTableViewCell: UITableViewCell {
     }
     
     @objc private func arrowTapped() {
-  //      arrowTapHandler?()
         let photos = Photo.makeMockPhotos()
         let photoVC = PhotosViewController(photos: photos)
         delegate?.pushVC(photoVC)
