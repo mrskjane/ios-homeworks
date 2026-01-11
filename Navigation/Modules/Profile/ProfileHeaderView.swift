@@ -2,17 +2,6 @@ import UIKit
 
 class ProfileHeaderView: UITableViewHeaderFooterView {
     
-    private let avatarImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 50
-        imageView.layer.borderWidth = 3
-        imageView.layer.borderColor = UIColor.white.cgColor
-        imageView.image = UIImage(named: "cat")
-        return imageView
-    }()
-    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Hipster Cat"
@@ -84,23 +73,17 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     private func setupLayout() {
         backgroundColor = .lightGray
         
-        contentView.addSubviews([avatarImageView, nameLabel, currentStatusLabel, statusTextField, setStatusButton])
+        contentView.addSubviews([nameLabel, currentStatusLabel, statusTextField, setStatusButton])
         
         statusTextField.addTarget(self, action: #selector(statusTextChanged(_:)), for: .editingChanged)
         
         setStatusButton.addTarget(self, action: #selector(didTapSetStatusButton), for: .touchUpInside)
     
         NSLayoutConstraint.activate([
-            //Аватарка: отступ 12pt сверху и слева
-            avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            avatarImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
-            avatarImageView.widthAnchor.constraint(equalToConstant: 100),
-            avatarImageView.heightAnchor.constraint(equalToConstant: 100),
             
-            //Имя: справа от аватарки + 20pt, выравнивание по верху аватарки
-            nameLabel.topAnchor.constraint(equalTo: avatarImageView.topAnchor),
-            nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 20),
-            nameLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -12),
+            nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 27),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 132),
+            nameLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -16),
             
             //Статус: под именем, отступ 12pt
             currentStatusLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 12),

@@ -16,6 +16,37 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private let avatarImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 50
+        imageView.layer.borderWidth = 3
+        imageView.layer.borderColor = UIColor.white.cgColor
+        imageView.image = UIImage(named: "cat")
+        imageView.isUserInteractionEnabled = true
+        
+        return imageView
+    }()
+    
+    private let dimmingView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        view.alpha = 0
+        
+        return view
+    }()
+    
+    private var closeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        button.tintColor = .white
+        button.alpha = 0
+        button.addTarget(ProfileViewController.self, action: #selector(closeAvatarView), for: .touchUpInside)
+        
+        return button
+    }()
+    
     // создаем таблицу
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -26,17 +57,53 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
         return tableView
     }()
     
+    // Начальные констрейнты
+    private var isAvatarExpanded: Bool = false
+
+    private var avatarTopConstraint: NSLayoutConstraint!
+    
+    private var avatarLeadingConstraint: NSLayoutConstraint!
+    
+    private var avatarWidthConstraint: NSLayoutConstraint!
+    
+    private var avatarHeightConstraint: NSLayoutConstraint!
+    
+    // Конечные констрейнты (на весь экран)
+    private var avatarCenterXConstraint: NSLayoutConstraint!
+    
+    private var avatarCenterYConstraint: NSLayoutConstraint!
+    
+    private var avatarFullScreenWidthConstraint: NSLayoutConstraint!
+    
+    private var avatarFullScreenHeightConstraint: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray6
         tableView.dataSource = self
         tableView.delegate = self
         setupLayout()
+        setupGesture()
+        setupAnimatedViews()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    func setupAnimatedViews() {
+        view.addSubviews([dimmingView, closeButton])
+        
+        NSLayoutConstraint.activate([
+            dimmingView.topAnchor.constraint(equalTo: view.topAnchor),
+            dimmingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            dimmingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            dimmingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            closeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+            ])
     }
     
     private func setupLayout() {
@@ -48,6 +115,73 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    private func setupGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateAvatar))
+        avatarImageView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func animateAvatar() {
+        self.view.addSubviews([self.avatarImageView])
+        
+        avatarCenterXConstraint = avatarImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+        avatarCenterYConstraint = avatarImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
+        avatarFullScreenWidthConstraint = avatarImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
+        avatarFullScreenHeightConstraint = avatarImageView.heightAnchor.constraint(equalTo: self.view.widthAnchor)
+        
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+            self.dimmingView.alpha = 0.75
+            
+            // Деактивируем старые констрейнты
+            self.avatarHeightConstraint.isActive = false
+            self.avatarTopConstraint.isActive = false
+            self.avatarLeadingConstraint.isActive = false
+            self.avatarWidthConstraint.isActive = false
+            
+            // Активируем новые
+            
+            self.avatarCenterXConstraint.isActive = true
+            self.avatarCenterYConstraint.isActive = true
+            self.avatarFullScreenWidthConstraint.isActive = true
+            self.avatarFullScreenHeightConstraint.isActive = true
+            
+            // Убираем скругление
+            self.avatarImageView.layer.cornerRadius = 0
+            
+            self.view.layoutIfNeeded()
+            
+        }) {_ in
+            UIView.animate(withDuration: 0.3) {
+                self.closeButton.alpha = 1
+            }
+        }
+    }
+    
+    @objc private func closeAvatarView() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.closeButton.alpha = 0
+        }) {_ in
+            UIView.animate(withDuration: 0.5, animations: {
+                self.dimmingView.alpha = 0
+                self.profileHeaderView.addSubviews([self.avatarImageView])
+                
+                self.avatarHeightConstraint.isActive = true
+                self.avatarTopConstraint.isActive = true
+                self.avatarLeadingConstraint.isActive = true
+                self.avatarWidthConstraint.isActive = true
+                
+                
+                self.avatarCenterXConstraint.isActive = false
+                self.avatarCenterYConstraint.isActive = false
+                self.avatarFullScreenWidthConstraint.isActive = false
+                self.avatarFullScreenHeightConstraint.isActive = false
+                
+                self.avatarImageView.layer.cornerRadius = 50
+                
+                self.view.layoutIfNeeded()
+            }) 
+        }
     }
 }
 
@@ -91,12 +225,27 @@ extension ProfileViewController {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch section {
         case 0:
-            return profileHeaderView
+            let header = profileHeaderView
+            header.addSubviews([avatarImageView])
+            
+            avatarTopConstraint = avatarImageView.topAnchor.constraint(equalTo: header.topAnchor, constant: 16)
+            avatarLeadingConstraint = avatarImageView.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 16)
+            avatarWidthConstraint = avatarImageView.widthAnchor.constraint(equalToConstant: 100)
+            avatarHeightConstraint = avatarImageView.heightAnchor.constraint(equalToConstant: 100)
+            
+            NSLayoutConstraint.activate([
+                avatarTopConstraint,
+                avatarLeadingConstraint,
+                avatarWidthConstraint,
+                avatarHeightConstraint
+            ])
+            
+            return header
         default:
             return nil
         }
     }
-        
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
         case 0:
