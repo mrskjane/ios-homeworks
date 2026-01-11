@@ -110,12 +110,12 @@ class PhotosTableViewCell: UITableViewCell {
         }) { (finished) in
             // Возвращаем полную непрозрачность
             UIView.animate(withDuration: 0.15) {
-                let photos = Photo.makeMockPhotos()
-                let photoVC = PhotosViewController(photos: photos)
-                self.delegate?.pushVC(photoVC)
                 UIView.animate(withDuration: 0.1) {
                     self.arrowImageView.alpha = 1.0
                 }
+                let photos = Photo.makeMockPhotos()
+                let photoVC = PhotosViewController(photos: photos)
+                self.delegate?.pushVC(photoVC)
             }
         }
     }
