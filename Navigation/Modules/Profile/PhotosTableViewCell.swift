@@ -21,13 +21,12 @@ class PhotosTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let arrowImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "arrow.right")
-        imageView.tintColor = .black
-        imageView.isUserInteractionEnabled = true
+    private let arrowButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "arrow.right"), for: .normal)
+        button.tintColor = .black
         
-        return imageView
+        return button
     }()
     
     private let photosStackView: UIStackView = {
@@ -60,7 +59,6 @@ class PhotosTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
         setupLayout()
-        setupGesture()
     }
     
     required init?(coder: NSCoder) {
@@ -72,8 +70,9 @@ class PhotosTableViewCell: UITableViewCell {
     }
     
     private func setupLayout() {
-        contentView.addSubviews([photosLabel, arrowImageView, photosStackView])
+        contentView.addSubviews([photosLabel, arrowButton, photosStackView])
         
+        arrowButton.addTarget(self, action: #selector(arrowTapped), for: .touchUpInside)
         // добавляем картинки в стэк
         for image in previewImages {
             photosStackView.addArrangedSubview(image)
@@ -85,10 +84,10 @@ class PhotosTableViewCell: UITableViewCell {
             photosLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             
             // стрелка
-            arrowImageView.centerYAnchor.constraint(equalTo: photosLabel.centerYAnchor),
-            arrowImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
-            arrowImageView.heightAnchor.constraint(equalToConstant: 24),
-            arrowImageView.widthAnchor.constraint(equalToConstant: 24),
+            arrowButton.centerYAnchor.constraint(equalTo: photosLabel.centerYAnchor),
+            arrowButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            arrowButton.heightAnchor.constraint(equalToConstant: 24),
+            arrowButton.widthAnchor.constraint(equalToConstant: 24),
             
             // стек фото
             photosStackView.topAnchor.constraint(equalTo: photosLabel.bottomAnchor, constant: 12),
@@ -98,25 +97,9 @@ class PhotosTableViewCell: UITableViewCell {
         ])
     }
     
-    private func setupGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(arrowTapped))
-        arrowImageView.addGestureRecognizer(tapGesture)
-    }
-    
     @objc private func arrowTapped() {
-        UIView.animate(withDuration: 0.15, animations: {
-            // Делаем стрелку полупрозрачной
-            self.arrowImageView.alpha = 0.5
-        }) { (finished) in
-            // Возвращаем полную непрозрачность
-            UIView.animate(withDuration: 0.15) {
-                UIView.animate(withDuration: 0.1) {
-                    self.arrowImageView.alpha = 1.0
-                }
                 let photos = Photo.makeMockPhotos()
                 let photoVC = PhotosViewController(photos: photos)
                 self.delegate?.pushVC(photoVC)
-            }
-        }
     }
 }
