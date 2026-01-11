@@ -58,6 +58,7 @@ class PhotosTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.selectionStyle = .none
         setupLayout()
         setupGesture()
     }
@@ -103,8 +104,19 @@ class PhotosTableViewCell: UITableViewCell {
     }
     
     @objc private func arrowTapped() {
-        let photos = Photo.makeMockPhotos()
-        let photoVC = PhotosViewController(photos: photos)
-        delegate?.pushVC(photoVC)
+        UIView.animate(withDuration: 0.15, animations: {
+            // Делаем стрелку полупрозрачной
+            self.arrowImageView.alpha = 0.5
+        }) { (finished) in
+            // Возвращаем полную непрозрачность
+            UIView.animate(withDuration: 0.15) {
+                let photos = Photo.makeMockPhotos()
+                let photoVC = PhotosViewController(photos: photos)
+                self.delegate?.pushVC(photoVC)
+                UIView.animate(withDuration: 0.1) {
+                    self.arrowImageView.alpha = 1.0
+                }
+            }
+        }
     }
 }
