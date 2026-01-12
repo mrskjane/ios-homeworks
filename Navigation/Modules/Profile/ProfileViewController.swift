@@ -42,7 +42,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
         button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         button.tintColor = .white
         button.alpha = 0
-        button.addTarget(ProfileViewController.self, action: #selector(closeAvatarView), for: .touchUpInside)
         
         return button
     }()
@@ -94,6 +93,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
     
     func setupAnimatedViews() {
         view.addSubviews([dimmingView, closeButton])
+        
+        closeButton.addTarget(self, action: #selector(closeAvatarView), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             dimmingView.topAnchor.constraint(equalTo: view.topAnchor),
