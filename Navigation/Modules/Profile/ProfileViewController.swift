@@ -57,7 +57,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
     }()
     
     // Начальные констрейнты
-    private var isAvatarExpanded: Bool = false
 
     private var avatarTopConstraint: NSLayoutConstraint!
     
@@ -141,13 +140,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
             self.avatarWidthConstraint.isActive = false
             
             // Активируем новые
-            
             self.avatarCenterXConstraint.isActive = true
             self.avatarCenterYConstraint.isActive = true
             self.avatarFullScreenWidthConstraint.isActive = true
             self.avatarFullScreenHeightConstraint.isActive = true
             
-            // Убираем скругление
+            // Убираем скругление, делаем квадрат
             self.avatarImageView.layer.cornerRadius = 0
             
             self.view.layoutIfNeeded()
@@ -178,6 +176,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
                 self.avatarFullScreenWidthConstraint.isActive = false
                 self.avatarFullScreenHeightConstraint.isActive = false
                 
+                // Снова делаем круг
                 self.avatarImageView.layer.cornerRadius = 50
                 
                 self.view.layoutIfNeeded()
