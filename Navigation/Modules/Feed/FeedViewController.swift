@@ -9,7 +9,6 @@ class FeedViewController: UIViewController {
         stackView.spacing = 10
         stackView.alignment = .center
         stackView.distribution = .fill
-        stackView.translatesAutoresizingMaskIntoConstraints = false
         
         return stackView
     }()
@@ -22,7 +21,6 @@ class FeedViewController: UIViewController {
         config.cornerStyle = .medium
         config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
         let button = UIButton(configuration: config)
-        button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
     }()
@@ -35,7 +33,6 @@ class FeedViewController: UIViewController {
         config.cornerStyle = .medium
         config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
         let button = UIButton(configuration: config)
-        button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
     }()
@@ -45,6 +42,7 @@ class FeedViewController: UIViewController {
         
         setupStackView()
         setupActions()
+        setupView()
         setupLayout()
     }
     
@@ -53,10 +51,13 @@ class FeedViewController: UIViewController {
         stackView.addArrangedSubview(secondButton)
     }
     
-    private func setupLayout() {
+    private func setupView() {
         title = "Лента"
-        view.addSubview(stackView)
+        view.addSubviews([stackView])
         view.backgroundColor = .systemBackground
+    }
+    
+    private func setupLayout() {
     
         NSLayoutConstraint.activate([
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),

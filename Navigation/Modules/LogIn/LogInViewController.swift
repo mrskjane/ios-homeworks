@@ -5,21 +5,18 @@ class LogInViewController: UIViewController {
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
     
     private let contentView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     private let vkLogoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "vk_logo"))
         imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -33,7 +30,6 @@ class LogInViewController: UIViewController {
         stack.layer.cornerRadius = 10
         stack.backgroundColor = .systemGray6
         stack.clipsToBounds = true
-        stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     
@@ -46,7 +42,6 @@ class LogInViewController: UIViewController {
         textField.autocapitalizationType = .none //отключена автоматическая заглавная буква
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         textField.leftViewMode = .always
-        textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
     
@@ -60,7 +55,6 @@ class LogInViewController: UIViewController {
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         textField.leftViewMode = .always
         textField.isSecureTextEntry = true
-        textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
     
@@ -69,7 +63,6 @@ class LogInViewController: UIViewController {
         let view = UIView()
         view.backgroundColor = .lightGray
         view.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
@@ -82,10 +75,8 @@ class LogInViewController: UIViewController {
     
         let bluePixelImage = UIImage(named: "blue_pixel")
         button.setBackgroundImage(bluePixelImage, for: .normal)
-        
         button.layer.cornerRadius = 10
         button.clipsToBounds = true
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(logInButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -116,12 +107,9 @@ class LogInViewController: UIViewController {
     }
     
     private func setupLayout() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
-        
-        contentView.addSubview(vkLogoImageView)
-        contentView.addSubview(stackView)
-        contentView.addSubview(logInButton)
+        view.addSubviews([scrollView])
+        scrollView.addSubviews([contentView])
+        contentView.addSubviews([vkLogoImageView, stackView, logInButton])
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),

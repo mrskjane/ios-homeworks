@@ -1,7 +1,7 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, UITableViewDelegate {
     
     private let profileHeaderView = ProfileHeaderView()
     
@@ -19,9 +19,9 @@ class ProfileViewController: UIViewController {
     // создаем таблицу
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .systemGray6
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: "PostCell")
+        tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: PhotosTableViewCell.id)
         
         return tableView
     }()
@@ -40,7 +40,7 @@ class ProfileViewController: UIViewController {
     }
     
     private func setupLayout() {
-        view.addSubview(tableView)
+        view.addSubviews([tableView])
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -55,34 +55,75 @@ extension ProfileViewController: UITableViewDataSource {
     
     // количество секций в таблице
     func numberOfSections(in tableView: UITableView) -> Int {
-        1
+        2
     }
     
     // количество ячеек
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return posts.count
+        switch section {
+        case 0:
+            return 1
+        default:
+            return posts.count
+            
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as? PostTableViewCell else {
-            return UITableViewCell()
+        // логика лоя секции 0
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: PhotosTableViewCell.id, for: indexPath) as! PhotosTableViewCell
+            cell.setup(delegate: self)
+            return cell
+        default:
+            // логика для секции 1 (Посты)
+            let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.id, for: indexPath) as! PostTableViewCell
+            let post = posts[indexPath.row]
+            cell.configure(with: post)
+            return cell
         }
-        let post = posts[indexPath.row]
-        cell.configure(with: post)
-        return cell
     }
 }
 
-extension ProfileViewController: UITableViewDelegate {
+extension ProfileViewController {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
+        switch section {
+        case 0:
             return profileHeaderView
+        default:
+            return nil
         }
-        return nil
+    }
+        
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        switch section {
+        case 0:
+            return 220
+        default:
+            return 0
+        }
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 220
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+           return nil
+       }
+       
+       func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+           // чтобы убрать серый отступ
+           return 0
+       }
+    
+    // обработка нажатия на ячейку
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // снимаем выделение (серый фон)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension ProfileViewController: PhotoTableViewCellDelegate {
+    func pushVC(_ vc: UIViewController) {
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

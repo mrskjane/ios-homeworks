@@ -10,7 +10,6 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         imageView.layer.borderWidth = 3
         imageView.layer.borderColor = UIColor.white.cgColor
         imageView.image = UIImage(named: "cat")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -19,7 +18,6 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         label.text = "Hipster Cat"
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -29,7 +27,6 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         label.textColor = .gray
         label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -55,7 +52,6 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         textField.layer.cornerRadius = 12
         textField.layer.masksToBounds = true
         textField.placeholder = "Введите новый статус..."
-        textField.translatesAutoresizingMaskIntoConstraints = false
         
         return textField
     }()
@@ -71,7 +67,6 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         button.layer.shadowRadius = 4
         button.layer.shadowOffset = CGSize(width: 4, height: 4)
         button.layer.shadowColor = UIColor.black.cgColor
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -80,7 +75,6 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         setupLayout()
-        setupConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -90,18 +84,12 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     private func setupLayout() {
         backgroundColor = .lightGray
         
-        contentView.addSubview(avatarImageView)
-        contentView.addSubview(nameLabel)
-        contentView.addSubview(currentStatusLabel)
-        contentView.addSubview(statusTextField)
-        contentView.addSubview(setStatusButton)
+        contentView.addSubviews([avatarImageView, nameLabel, currentStatusLabel, statusTextField, setStatusButton])
         
         statusTextField.addTarget(self, action: #selector(statusTextChanged(_:)), for: .editingChanged)
         
         setStatusButton.addTarget(self, action: #selector(didTapSetStatusButton), for: .touchUpInside)
-    }
     
-    private func setupConstraints() {
         NSLayoutConstraint.activate([
             //Аватарка: отступ 12pt сверху и слева
             avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),

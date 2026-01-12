@@ -7,19 +7,23 @@ class InfoViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Показать алерт", for: .normal)
         button.addTarget(self, action: #selector(didTapShowAlertButton), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
+
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
         setupLayout()
     }
     
-    private func setupLayout() {
+    private func setupView() {
         title = "Информация"
         view.backgroundColor = .systemBackground
-        view.addSubview(showAlertButton)
+    }
+    
+    private func setupLayout() {
+        view.addSubviews([showAlertButton])
     
         NSLayoutConstraint.activate([
             showAlertButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
