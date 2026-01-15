@@ -39,7 +39,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
     
     private var closeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.tintColor = .white
         button.alpha = 0
         
@@ -125,11 +125,20 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
     @objc private func animateAvatar() {
         self.view.addSubviews([self.avatarImageView])
         
-        avatarCenterXConstraint = avatarImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
-        avatarCenterYConstraint = avatarImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
-        avatarFullScreenWidthConstraint = avatarImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
-        avatarFullScreenHeightConstraint = avatarImageView.heightAnchor.constraint(equalTo: self.view.widthAnchor)
+        self.avatarHeightConstraint.isActive = true
+        self.avatarTopConstraint.isActive = true
+        self.avatarLeadingConstraint.isActive = true
+        self.avatarWidthConstraint.isActive = true
         
+        self.view.layoutIfNeeded()
+        
+        if avatarCenterXConstraint == nil {
+            avatarCenterXConstraint = avatarImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+            avatarCenterYConstraint = avatarImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
+            avatarFullScreenWidthConstraint = avatarImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
+            avatarFullScreenHeightConstraint = avatarImageView.heightAnchor.constraint(equalTo: self.view.widthAnchor)
+        }
+            
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             self.dimmingView.alpha = 0.75
             
