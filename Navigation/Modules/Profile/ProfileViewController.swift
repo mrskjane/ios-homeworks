@@ -138,21 +138,23 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
             avatarFullScreenWidthConstraint = avatarImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
             avatarFullScreenHeightConstraint = avatarImageView.heightAnchor.constraint(equalTo: self.view.widthAnchor)
         }
-            
+        // Деактивируем старые констрейнты
+        self.avatarHeightConstraint.isActive = false
+        self.avatarTopConstraint.isActive = false
+        self.avatarLeadingConstraint.isActive = false
+        self.avatarWidthConstraint.isActive = false
+        
+        // Активируем новые
+        self.avatarCenterXConstraint.isActive = true
+        self.avatarCenterYConstraint.isActive = true
+        self.avatarFullScreenWidthConstraint.isActive = true
+        self.avatarFullScreenHeightConstraint.isActive = true
+        
+        self.view.setNeedsLayout()
+        
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+            
             self.dimmingView.alpha = 0.75
-            
-            // Деактивируем старые констрейнты
-            self.avatarHeightConstraint.isActive = false
-            self.avatarTopConstraint.isActive = false
-            self.avatarLeadingConstraint.isActive = false
-            self.avatarWidthConstraint.isActive = false
-            
-            // Активируем новые
-            self.avatarCenterXConstraint.isActive = true
-            self.avatarCenterYConstraint.isActive = true
-            self.avatarFullScreenWidthConstraint.isActive = true
-            self.avatarFullScreenHeightConstraint.isActive = true
             
             // Убираем скругление, делаем квадрат
             self.avatarImageView.layer.cornerRadius = 0
@@ -167,29 +169,34 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
     }
     
     @objc private func closeAvatarView() {
-        UIView.animate(withDuration: 0.3, animations: {
+        
+        UIView.animate(withDuration: 1, animations: {
             self.closeButton.alpha = 0
         }) {_ in
-            UIView.animate(withDuration: 0.5, animations: {
+            self.profileHeaderView.addSubviews([self.avatarImageView])
+            
+            self.avatarCenterXConstraint.isActive = false
+            self.avatarCenterYConstraint.isActive = false
+            self.avatarFullScreenWidthConstraint.isActive = false
+            self.avatarFullScreenHeightConstraint.isActive = false
+            
+            self.avatarHeightConstraint.isActive = true
+            self.avatarTopConstraint.isActive = true
+            self.avatarLeadingConstraint.isActive = true
+            self.avatarWidthConstraint.isActive = true
+            
+            self.view.setNeedsLayout()
+            self.profileHeaderView.setNeedsLayout()
+            
+            UIView.animate(withDuration: 1, animations: {
                 self.dimmingView.alpha = 0
-                self.profileHeaderView.addSubviews([self.avatarImageView])
-                
-                self.avatarHeightConstraint.isActive = true
-                self.avatarTopConstraint.isActive = true
-                self.avatarLeadingConstraint.isActive = true
-                self.avatarWidthConstraint.isActive = true
-                
-                
-                self.avatarCenterXConstraint.isActive = false
-                self.avatarCenterYConstraint.isActive = false
-                self.avatarFullScreenWidthConstraint.isActive = false
-                self.avatarFullScreenHeightConstraint.isActive = false
                 
                 // Снова делаем круг
                 self.avatarImageView.layer.cornerRadius = 50
                 
                 self.view.layoutIfNeeded()
-            }) 
+                self.profileHeaderView.layoutIfNeeded()
+            })
         }
     }
 }
