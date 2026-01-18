@@ -25,7 +25,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
         imageView.layer.borderColor = UIColor.white.cgColor
         imageView.image = UIImage(named: "cat")
         imageView.isUserInteractionEnabled = true
-        
         return imageView
     }()
     
@@ -33,47 +32,27 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
         let view = UIView()
         view.backgroundColor = .black
         view.alpha = 0
-        
         return view
     }()
     
     private var closeButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = UIButton()
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.tintColor = .white
         button.alpha = 0
-        
         return button
     }()
     
-    // создаем таблицу
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.backgroundColor = .systemGray6
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: "PostCell")
         tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: PhotosTableViewCell.id)
-        
         return tableView
     }()
     
-    // Начальные констрейнты
-
-    private var avatarTopConstraint: NSLayoutConstraint!
-    
-    private var avatarLeadingConstraint: NSLayoutConstraint!
-    
-    private var avatarWidthConstraint: NSLayoutConstraint!
-    
-    private var avatarHeightConstraint: NSLayoutConstraint!
-    
-    // Конечные констрейнты (на весь экран)
-    private var avatarCenterXConstraint: NSLayoutConstraint!
-    
-    private var avatarCenterYConstraint: NSLayoutConstraint!
-    
-    private var avatarFullScreenWidthConstraint: NSLayoutConstraint!
-    
-    private var avatarFullScreenHeightConstraint: NSLayoutConstraint!
+    private var initialConstraints: [NSLayoutConstraint] = []
+    private var finalConstraints: [NSLayoutConstraint] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,8 +60,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
         tableView.dataSource = self
         tableView.delegate = self
         setupLayout()
-        setupGesture()
         setupAnimatedViews()
+        setupGesture()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -123,45 +102,32 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
     }
     
     @objc private func animateAvatar() {
-        self.view.addSubviews([self.avatarImageView])
+        view.addSubviews([avatarImageView])
         
-        self.avatarHeightConstraint.isActive = true
-        self.avatarTopConstraint.isActive = true
-        self.avatarLeadingConstraint.isActive = true
-        self.avatarWidthConstraint.isActive = true
-        
-        self.view.layoutIfNeeded()
-        
-        if avatarCenterXConstraint == nil {
-            avatarCenterXConstraint = avatarImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
-            avatarCenterYConstraint = avatarImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
-            avatarFullScreenWidthConstraint = avatarImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
-            avatarFullScreenHeightConstraint = avatarImageView.heightAnchor.constraint(equalTo: self.view.widthAnchor)
+        NSLayoutConstraint.deactivate(initialConstraints)
+        initialConstraints = [
+            avatarImageView.topAnchor.constraint(equalTo: profileHeaderView.contentView.topAnchor, constant: 16),
+            avatarImageView.leadingAnchor.constraint(equalTo: profileHeaderView.contentView.leadingAnchor, constant: 16),
+            avatarImageView.widthAnchor.constraint(equalToConstant: 100),
+            avatarImageView.heightAnchor.constraint(equalToConstant: 100)
+        ]
+        NSLayoutConstraint.activate(initialConstraints)
+        view.layoutIfNeeded()
+        NSLayoutConstraint.deactivate(initialConstraints)
+        if finalConstraints.isEmpty {
+            finalConstraints = [
+                avatarImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                avatarImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                avatarImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+                avatarImageView.heightAnchor.constraint(equalTo: view.widthAnchor)
+            ]
         }
-        // Деактивируем старые констрейнты
-        self.avatarHeightConstraint.isActive = false
-        self.avatarTopConstraint.isActive = false
-        self.avatarLeadingConstraint.isActive = false
-        self.avatarWidthConstraint.isActive = false
-        
-        // Активируем новые
-        self.avatarCenterXConstraint.isActive = true
-        self.avatarCenterYConstraint.isActive = true
-        self.avatarFullScreenWidthConstraint.isActive = true
-        self.avatarFullScreenHeightConstraint.isActive = true
-        
-        self.view.setNeedsLayout()
-        
+        NSLayoutConstraint.activate(finalConstraints)
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-            
             self.dimmingView.alpha = 0.75
-            
-            // Убираем скругление, делаем квадрат
             self.avatarImageView.layer.cornerRadius = 0
-            
             self.view.layoutIfNeeded()
-            
-        }) {_ in
+        }) { _ in
             UIView.animate(withDuration: 0.3) {
                 self.closeButton.alpha = 1
             }
@@ -170,45 +136,32 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
     
     @objc private func closeAvatarView() {
         
-        UIView.animate(withDuration: 1, animations: {
+        UIView.animate(withDuration: 0, animations: {
             self.closeButton.alpha = 0
-        }) {_ in
-            self.profileHeaderView.addSubviews([self.avatarImageView])
+        }) { _ in
+            NSLayoutConstraint.deactivate(self.finalConstraints)
+            NSLayoutConstraint.activate(self.initialConstraints)
             
-            self.avatarCenterXConstraint.isActive = false
-            self.avatarCenterYConstraint.isActive = false
-            self.avatarFullScreenWidthConstraint.isActive = false
-            self.avatarFullScreenHeightConstraint.isActive = false
-            
-            self.avatarHeightConstraint.isActive = true
-            self.avatarTopConstraint.isActive = true
-            self.avatarLeadingConstraint.isActive = true
-            self.avatarWidthConstraint.isActive = true
-            
-            self.view.setNeedsLayout()
-            self.profileHeaderView.setNeedsLayout()
-            
-            UIView.animate(withDuration: 1, animations: {
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
                 self.dimmingView.alpha = 0
-                
-                // Снова делаем круг
                 self.avatarImageView.layer.cornerRadius = 50
-                
                 self.view.layoutIfNeeded()
-                self.profileHeaderView.layoutIfNeeded()
-            })
+            }) { _ in
+                if self.avatarImageView.superview == self.view {
+                    self.profileHeaderView.contentView.addSubview(self.avatarImageView)
+                    NSLayoutConstraint.activate(self.initialConstraints)
+                }
+            }
         }
     }
 }
 
 extension ProfileViewController: UITableViewDataSource {
     
-    // количество секций в таблице
     func numberOfSections(in tableView: UITableView) -> Int {
         2
     }
     
-    // количество ячеек
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
@@ -220,14 +173,12 @@ extension ProfileViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // логика лоя секции 0
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: PhotosTableViewCell.id, for: indexPath) as! PhotosTableViewCell
             cell.setup(delegate: self)
             return cell
         default:
-            // логика для секции 1 (Посты)
             let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.id, for: indexPath) as! PostTableViewCell
             let post = posts[indexPath.row]
             cell.configure(with: post)
@@ -239,28 +190,21 @@ extension ProfileViewController: UITableViewDataSource {
 extension ProfileViewController {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        switch section {
-        case 0:
-            let header = profileHeaderView
-            header.addSubviews([avatarImageView])
-            
-            avatarTopConstraint = avatarImageView.topAnchor.constraint(equalTo: header.topAnchor, constant: 16)
-            avatarLeadingConstraint = avatarImageView.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 16)
-            avatarWidthConstraint = avatarImageView.widthAnchor.constraint(equalToConstant: 100)
-            avatarHeightConstraint = avatarImageView.heightAnchor.constraint(equalToConstant: 100)
-            
-            NSLayoutConstraint.activate([
-                avatarTopConstraint,
-                avatarLeadingConstraint,
-                avatarWidthConstraint,
-                avatarHeightConstraint
-            ])
-            
-            return header
-        default:
+            if section == 0 {
+                let header = profileHeaderView
+                if avatarImageView.superview != self.view {
+                    header.contentView.addSubviews([avatarImageView])
+                    NSLayoutConstraint.activate([
+                        avatarImageView.topAnchor.constraint(equalTo: header.contentView.topAnchor, constant: 16),
+                        avatarImageView.leadingAnchor.constraint(equalTo: header.contentView.leadingAnchor, constant: 16),
+                        avatarImageView.widthAnchor.constraint(equalToConstant: 100),
+                        avatarImageView.heightAnchor.constraint(equalToConstant: 100)
+                    ])
+                }
+                return header
+            }
             return nil
         }
-    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
@@ -276,13 +220,10 @@ extension ProfileViewController {
        }
        
        func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-           // чтобы убрать серый отступ
            return 0
        }
     
-    // обработка нажатия на ячейку
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // снимаем выделение (серый фон)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
