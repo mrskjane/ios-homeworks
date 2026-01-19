@@ -48,6 +48,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
         tableView.backgroundColor = .systemGray6
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: "PostCell")
         tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: PhotosTableViewCell.id)
+        tableView.dataSource = self
+        tableView.delegate = self
         return tableView
     }()
     
@@ -56,12 +58,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGray6
-        tableView.dataSource = self
-        tableView.delegate = self
-        setupLayout()
-        setupAnimatedViews()
-        setupGesture()
+        setupUI()
+        setupGestures()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -69,12 +67,15 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
-    func setupAnimatedViews() {
-        view.addSubviews([dimmingView, closeButton])
-        
-        closeButton.addTarget(self, action: #selector(closeAvatarView), for: .touchUpInside)
-        
+    func setupUI() {
+        view.backgroundColor = .systemGray6
+        view.addSubviews([tableView, dimmingView, closeButton])
         NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
             dimmingView.topAnchor.constraint(equalTo: view.topAnchor),
             dimmingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             dimmingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -82,37 +83,29 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
             
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             closeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
-            ])
-    }
-    
-    private func setupLayout() {
-        view.addSubviews([tableView])
-        
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        closeButton.addTarget(self, action: #selector(closeAvatarView), for: .touchUpInside)
     }
     
-    private func setupGesture() {
+    private func setupGestures() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateAvatar))
         avatarImageView.addGestureRecognizer(tapGesture)
     }
     
-    @objc private func animateAvatar() {
-        view.addSubviews([avatarImageView])
-        
-        NSLayoutConstraint.deactivate(initialConstraints)
-        initialConstraints = [
-            avatarImageView.topAnchor.constraint(equalTo: profileHeaderView.contentView.topAnchor, constant: 16),
-            avatarImageView.leadingAnchor.constraint(equalTo: profileHeaderView.contentView.leadingAnchor, constant: 16),
-            avatarImageView.widthAnchor.constraint(equalToConstant: 100),
-            avatarImageView.heightAnchor.constraint(equalToConstant: 100)
-        ]
+    private func activateInitialConstraints() {
+        NSLayoutConstraint.deactivate(finalConstraints)
+        if initialConstraints.isEmpty {
+            initialConstraints = [
+                avatarImageView.topAnchor.constraint(equalTo: profileHeaderView.contentView.topAnchor, constant: 16),
+                avatarImageView.leadingAnchor.constraint(equalTo: profileHeaderView.contentView.leadingAnchor, constant: 16),
+                avatarImageView.widthAnchor.constraint(equalToConstant: 100),
+                avatarImageView.heightAnchor.constraint(equalToConstant: 100)
+            ]
+        }
         NSLayoutConstraint.activate(initialConstraints)
-        view.layoutIfNeeded()
+    }
+    
+    private func activateFinalConstraints() {
         NSLayoutConstraint.deactivate(initialConstraints)
         if finalConstraints.isEmpty {
             finalConstraints = [
@@ -123,6 +116,15 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
             ]
         }
         NSLayoutConstraint.activate(finalConstraints)
+    }
+    
+    @objc private func animateAvatar() {
+        view.addSubviews([avatarImageView])
+        activateInitialConstraints()
+        view.layoutIfNeeded()
+        NSLayoutConstraint.deactivate(initialConstraints)
+        activateFinalConstraints()
+        
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             self.dimmingView.alpha = 0.75
             self.avatarImageView.layer.cornerRadius = 0
@@ -139,8 +141,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
         UIView.animate(withDuration: 0, animations: {
             self.closeButton.alpha = 0
         }) { _ in
-            NSLayoutConstraint.deactivate(self.finalConstraints)
-            NSLayoutConstraint.activate(self.initialConstraints)
+            self.activateInitialConstraints()
             
             UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
                 self.dimmingView.alpha = 0
@@ -149,7 +150,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
             }) { _ in
                 if self.avatarImageView.superview == self.view {
                     self.profileHeaderView.contentView.addSubview(self.avatarImageView)
-                    NSLayoutConstraint.activate(self.initialConstraints)
+                    self.activateInitialConstraints()
                 }
             }
         }
@@ -190,21 +191,16 @@ extension ProfileViewController: UITableViewDataSource {
 extension ProfileViewController {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-            if section == 0 {
-                let header = profileHeaderView
-                if avatarImageView.superview != self.view {
-                    header.contentView.addSubviews([avatarImageView])
-                    NSLayoutConstraint.activate([
-                        avatarImageView.topAnchor.constraint(equalTo: header.contentView.topAnchor, constant: 16),
-                        avatarImageView.leadingAnchor.constraint(equalTo: header.contentView.leadingAnchor, constant: 16),
-                        avatarImageView.widthAnchor.constraint(equalToConstant: 100),
-                        avatarImageView.heightAnchor.constraint(equalToConstant: 100)
-                    ])
-                }
-                return header
+        if section == 0 {
+            let header = profileHeaderView
+            if avatarImageView.superview != self.view {
+                header.contentView.addSubviews([avatarImageView])
+                activateInitialConstraints()
             }
-            return nil
+            return header
         }
+        return nil
+    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
@@ -216,12 +212,12 @@ extension ProfileViewController {
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-           return nil
-       }
-       
-       func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-           return 0
-       }
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0
+    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
