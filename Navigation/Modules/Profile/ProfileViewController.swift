@@ -92,8 +92,9 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
         avatarImageView.addGestureRecognizer(tapGesture)
     }
     
-    private func activateInitialConstraints() {
-        NSLayoutConstraint.deactivate(finalConstraints)
+    @objc private func animateAvatar() {
+        view.addSubviews([avatarImageView])
+        NSLayoutConstraint.deactivate(initialConstraints)
         if initialConstraints.isEmpty {
             initialConstraints = [
                 avatarImageView.topAnchor.constraint(equalTo: profileHeaderView.contentView.topAnchor, constant: 16),
@@ -103,9 +104,9 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
             ]
         }
         NSLayoutConstraint.activate(initialConstraints)
-    }
-    
-    private func activateFinalConstraints() {
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
+        
         NSLayoutConstraint.deactivate(initialConstraints)
         if finalConstraints.isEmpty {
             finalConstraints = [
@@ -116,14 +117,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
             ]
         }
         NSLayoutConstraint.activate(finalConstraints)
-    }
-    
-    @objc private func animateAvatar() {
-        view.addSubviews([avatarImageView])
-        activateInitialConstraints()
-        view.layoutIfNeeded()
-        NSLayoutConstraint.deactivate(initialConstraints)
-        activateFinalConstraints()
         
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             self.dimmingView.alpha = 0.75
@@ -141,16 +134,18 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
         UIView.animate(withDuration: 0, animations: {
             self.closeButton.alpha = 0
         }) { _ in
-            self.activateInitialConstraints()
-            
+            NSLayoutConstraint.deactivate(self.finalConstraints)
+            NSLayoutConstraint.activate(self.initialConstraints)
             UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
                 self.dimmingView.alpha = 0
                 self.avatarImageView.layer.cornerRadius = 50
+                self.view.setNeedsLayout()
                 self.view.layoutIfNeeded()
             }) { _ in
                 if self.avatarImageView.superview == self.view {
                     self.profileHeaderView.contentView.addSubview(self.avatarImageView)
-                    self.activateInitialConstraints()
+                    NSLayoutConstraint.activate(self.initialConstraints)
+                    //self.activateInitialConstraints()
                 }
             }
         }
@@ -195,7 +190,15 @@ extension ProfileViewController {
             let header = profileHeaderView
             if avatarImageView.superview != self.view {
                 header.contentView.addSubviews([avatarImageView])
-                activateInitialConstraints()
+                if initialConstraints.isEmpty {
+                    initialConstraints = [
+                        avatarImageView.topAnchor.constraint(equalTo: profileHeaderView.contentView.topAnchor, constant: 16),
+                        avatarImageView.leadingAnchor.constraint(equalTo: profileHeaderView.contentView.leadingAnchor, constant: 16),
+                        avatarImageView.widthAnchor.constraint(equalToConstant: 100),
+                        avatarImageView.heightAnchor.constraint(equalToConstant: 100)
+                    ]
+                }
+                NSLayoutConstraint.activate(initialConstraints)
             }
             return header
         }
