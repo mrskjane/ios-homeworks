@@ -155,31 +155,49 @@ class LogInViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(tapGesture)
     }
+    
+    private func showAlert(message: String) {
+        let alert = UIAlertController(
+            title: "Ошибка",
+            message: message,
+            preferredStyle: .alert
+        )
+        let okAction = UIAlertAction(title: "ОК", style: .default, handler: nil)
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
+    }
 
     @objc private func logInButtonTapped() {
-        let loginText = loginTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let passwordText = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        passwordHintLabel.isHidden = true
-        passwordHintLabel.text = nil
-        let minPasswordLenght = 6
-        var isValid = true
-        if loginText.isEmpty {
+        let result = LoginService.shared.authorize(
+            login: loginTextField.text,
+            pass: passwordTextField.text
+        )
+        
+        switch result {
+            
+        case .success:
+            passwordHintLabel.isHidden = true
+            let profileVC = ProfileViewController(posts: Post.makeMockPosts())
+            navigationController?.pushViewController(profileVC, animated: true)
+            
+        case .emptyLogin:
             loginTextField.shake()
-            isValid = false
-        }
-        if passwordText.isEmpty {
+            
+        case .emptyPassword:
             passwordTextField.shake()
-            isValid = false
-        } else if passwordText.count < minPasswordLenght {
+            passwordHintLabel.isHidden = true
+            
+        case .shortPassword:
             passwordTextField.shake()
-            passwordHintLabel.text = "Пароль должен содерждать не менее \(minPasswordLenght) символов"
             passwordHintLabel.isHidden = false
-            isValid = false
+            
+        case .wrongCredentials:
+            passwordHintLabel.isHidden = true
+            showAlert(message: "Неверный логин или пароль")
+        case .invalidEmail:
+            loginTextField.shake()
+            showAlert(message: "Введите корректный адрес электронной почты (например, name@mail.com)")
         }
-        guard isValid else { return }
-        let posts = Post.makeMockPosts()
-        let profileVC = ProfileViewController(posts: posts)
-        navigationController?.pushViewController(profileVC, animated: true)
     }
     
     @objc private func passwordChanged() {
