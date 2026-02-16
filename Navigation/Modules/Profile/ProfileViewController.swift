@@ -130,7 +130,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate {
     }
     
     @objc private func closeAvatarView() {
-        
         UIView.animate(withDuration: 0, animations: {
             self.closeButton.alpha = 0
         }) { _ in

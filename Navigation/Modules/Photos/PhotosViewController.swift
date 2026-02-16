@@ -30,7 +30,6 @@ class PhotosViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupLayout()
-        
         collectionView.dataSource = self
         collectionView.delegate = self
     }
@@ -69,8 +68,7 @@ extension PhotosViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotosCollectionViewCell
-        
-        // Берем имя картинки из массива по индексу
+
         let imageName = photos[indexPath.item]
         cell.configure(with: imageName)
         
@@ -85,7 +83,6 @@ extension PhotosViewController: UICollectionViewDelegateFlowLayout {
         }
         
         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            
             let spacing: CGFloat = 8
             let countOfItems: CGFloat = 3
             let totalSpacing = (spacing * (countOfItems + 1))

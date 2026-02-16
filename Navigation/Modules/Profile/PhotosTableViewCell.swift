@@ -32,8 +32,8 @@ class PhotosTableViewCell: UITableViewCell {
     private let photosStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.distribution = .fillEqually // делит место поровну
-        stackView.spacing = 8 // расстояние между фото
+        stackView.distribution = .fillEqually
+        stackView.spacing = 8
         
         return stackView
     }()
@@ -71,25 +71,20 @@ class PhotosTableViewCell: UITableViewCell {
     
     private func setupLayout() {
         contentView.addSubviews([photosLabel, arrowButton, photosStackView])
-        
         arrowButton.addTarget(self, action: #selector(arrowTapped), for: .touchUpInside)
-        // добавляем картинки в стэк
         for image in previewImages {
             photosStackView.addArrangedSubview(image)
         }
         
         NSLayoutConstraint.activate([
-            // заголовок
             photosLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
             photosLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             
-            // стрелка
             arrowButton.centerYAnchor.constraint(equalTo: photosLabel.centerYAnchor),
             arrowButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             arrowButton.heightAnchor.constraint(equalToConstant: 24),
             arrowButton.widthAnchor.constraint(equalToConstant: 24),
             
-            // стек фото
             photosStackView.topAnchor.constraint(equalTo: photosLabel.bottomAnchor, constant: 12),
             photosStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             photosStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),

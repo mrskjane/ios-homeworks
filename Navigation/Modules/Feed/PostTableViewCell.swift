@@ -5,7 +5,6 @@ class PostTableViewCell: UITableViewCell {
     
     static var id = "PostCell"
 
-// автор поста
     private let authorLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
@@ -15,7 +14,6 @@ class PostTableViewCell: UITableViewCell {
         return label
     }()
     
-// изображение поста
     private let postImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -24,8 +22,7 @@ class PostTableViewCell: UITableViewCell {
         
         return imageView
     }()
-    
-// текст поста
+
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
@@ -34,8 +31,7 @@ class PostTableViewCell: UITableViewCell {
         
         return label
     }()
-    
-// количество лайков
+
     private let likesLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
@@ -44,7 +40,6 @@ class PostTableViewCell: UITableViewCell {
         return label
     }()
 
-// количество просмотров
     private let viewsLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
@@ -64,40 +59,32 @@ class PostTableViewCell: UITableViewCell {
     
     private func setupLayout() {
         contentView.addSubviews([authorLabel, authorLabel, postImageView, descriptionLabel, likesLabel, viewsLabel])
-        
         let padding: CGFloat = 16.0
         
         NSLayoutConstraint.activate([
-            
-            // authorLabel с отступама сверху, слева, справа
             authorLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: padding),
             authorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             authorLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             
-            
-            // postImageView под автором 
             postImageView.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: 12),
             postImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             postImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             postImageView.heightAnchor.constraint(equalTo: postImageView.widthAnchor),
-            
-            // descriptionLabel под картинкой отспуп 16
+
             descriptionLabel.topAnchor.constraint(equalTo: postImageView.bottomAnchor, constant: padding),
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            
-            // likesLabel под описанием отступ 16
+
             likesLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: padding),
             likesLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             likesLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding),
-            
-            // views выравниваем по верху с likes
+
             viewsLabel.topAnchor.constraint(equalTo: likesLabel.topAnchor),
             viewsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             viewsLabel.bottomAnchor.constraint(equalTo: likesLabel.bottomAnchor)
         ])
     }
-        // метод для наполнения ячеек данными
+
         func configure(with post: Post) {
             authorLabel.text = post.author
             postImageView.image = UIImage(named: post.image)

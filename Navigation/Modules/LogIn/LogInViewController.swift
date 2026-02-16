@@ -38,8 +38,8 @@ class LogInViewController: UIViewController {
         textField.placeholder = "Email or phone"
         textField.font = UIFont.systemFont(ofSize: 16)
         textField.textColor = .black
-        textField.tintColor = UIColor(named: "AccentColor") //цвет курсора
-        textField.autocapitalizationType = .none //отключена автоматическая заглавная буква
+        textField.tintColor = UIColor(named: "AccentColor")
+        textField.autocapitalizationType = .none
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         textField.leftViewMode = .always
         return textField
@@ -50,15 +50,14 @@ class LogInViewController: UIViewController {
         textField.placeholder = "Password"
         textField.font = UIFont.systemFont(ofSize: 16)
         textField.textColor = .black
-        textField.tintColor = UIColor(named: "AccentColor") //цвет курсора
-        textField.autocapitalizationType = .none //отключена автоматическая заглавная буква
+        textField.tintColor = UIColor(named: "AccentColor")
+        textField.autocapitalizationType = .none
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         textField.leftViewMode = .always
         textField.isSecureTextEntry = true
         return textField
     }()
-    
-    // разделитель между полями ввода
+
     private let separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .lightGray
@@ -66,7 +65,6 @@ class LogInViewController: UIViewController {
         return view
     }()
 
-    
     private lazy var logInButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Log in", for: .normal)
@@ -80,19 +78,28 @@ class LogInViewController: UIViewController {
         button.addTarget(self, action: #selector(logInButtonTapped), for: .touchUpInside)
         return button
     }()
-  
+    
+    private let passwordHintLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .systemRed
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.numberOfLines = 0
+        label.isHidden = true
+
+        return label
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupLayout()
         setupGesture()
+        passwordTextField.addTarget(self, action: #selector(passwordChanged), for: .editingChanged)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
-        
-        // подписываемся на уведомления клавиатуры
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -100,8 +107,6 @@ class LogInViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
-
-        // отписываемся от уведомлений
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -109,7 +114,7 @@ class LogInViewController: UIViewController {
     private func setupLayout() {
         view.addSubviews([scrollView])
         scrollView.addSubviews([contentView])
-        contentView.addSubviews([vkLogoImageView, stackView, logInButton])
+        contentView.addSubviews([vkLogoImageView, stackView, passwordHintLabel, logInButton])
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -123,21 +128,21 @@ class LogInViewController: UIViewController {
             contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
             
-            
-            // логотип VK: отступ сверху 120pt
             vkLogoImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 120),
             vkLogoImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             vkLogoImageView.widthAnchor.constraint(equalToConstant: 100),
             vkLogoImageView.heightAnchor.constraint(equalToConstant: 100),
             
-            // stackView под логотипом, отступ 120pt
             stackView.topAnchor.constraint(equalTo: vkLogoImageView.bottomAnchor, constant: 120),
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            stackView.heightAnchor.constraint(equalToConstant: 100), // высота всего stackView
+            stackView.heightAnchor.constraint(equalToConstant: 100),
+            
+            passwordHintLabel.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 8),
+            passwordHintLabel.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            passwordHintLabel.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
 
-            // кнопка Log In: под stackView, отступ 16pt
-            logInButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 16),
+            logInButton.topAnchor.constraint(equalTo: passwordHintLabel.bottomAnchor, constant: 16),
             logInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             logInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             logInButton.heightAnchor.constraint(equalToConstant: 50),
@@ -145,17 +150,42 @@ class LogInViewController: UIViewController {
             logInButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
-    
-    // функция для настройки скрытия клавиатуры
+
     private func setupGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(tapGesture)
     }
 
     @objc private func logInButtonTapped() {
+        let loginText = loginTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let passwordText = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        passwordHintLabel.isHidden = true
+        passwordHintLabel.text = nil
+        let minPasswordLenght = 6
+        var isValid = true
+        if loginText.isEmpty {
+            loginTextField.shake()
+            isValid = false
+        }
+        if passwordText.isEmpty {
+            passwordTextField.shake()
+            isValid = false
+        } else if passwordText.count < minPasswordLenght {
+            passwordTextField.shake()
+            passwordHintLabel.text = "Пароль должен содерждать не менее \(minPasswordLenght) символов"
+            passwordHintLabel.isHidden = false
+            isValid = false
+        }
+        guard isValid else { return }
         let posts = Post.makeMockPosts()
         let profileVC = ProfileViewController(posts: posts)
         navigationController?.pushViewController(profileVC, animated: true)
+    }
+    
+    @objc private func passwordChanged() {
+        if !passwordHintLabel.isHidden {
+            passwordHintLabel.isHidden = true
+        }
     }
     
     @objc private func hideKeyboard() {
@@ -164,14 +194,12 @@ class LogInViewController: UIViewController {
         
     @objc private func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            // Увеличиваем нижний отступ у scrollView на высоту клавиатуры
             scrollView.contentInset.bottom = keyboardSize.height
             scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
         }
     }
     
     @objc private func keyboardWillHide(notification: NSNotification) {
-        // Возвращаем отступ в ноль
         scrollView.contentInset.bottom = 0
         scrollView.verticalScrollIndicatorInsets = .zero
     }

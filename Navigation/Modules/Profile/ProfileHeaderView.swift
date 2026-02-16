@@ -22,7 +22,6 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     private let statusTextField: UITextField = {
         let textField = UITextField()
         
-        // Внутренний отступ слева и справа — 12 pt
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: textField.frame.height))
         textField.leftView = paddingView
         textField.leftViewMode = .always
@@ -31,7 +30,6 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         textField.rightView = rightPaddingView
         textField.rightViewMode = .always
         
-        // Внешний вид
         textField.borderStyle = .none
         textField.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         textField.textColor = .black
@@ -72,31 +70,24 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private func setupLayout() {
         backgroundColor = .lightGray
-        
         contentView.addSubviews([nameLabel, currentStatusLabel, statusTextField, setStatusButton])
-        
         statusTextField.addTarget(self, action: #selector(statusTextChanged(_:)), for: .editingChanged)
-        
         setStatusButton.addTarget(self, action: #selector(didTapSetStatusButton), for: .touchUpInside)
-    
+        
         NSLayoutConstraint.activate([
-            
             nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 27),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 132),
             nameLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -16),
             
-            //Статус: под именем, отступ 12pt
             currentStatusLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 12),
             currentStatusLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             currentStatusLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
             
-            //Поле ввода: под статусом, отстур 8pt, ширина как у статуса
             statusTextField.topAnchor.constraint(equalTo: currentStatusLabel.bottomAnchor, constant: 8),
             statusTextField.leadingAnchor.constraint(equalTo: currentStatusLabel.leadingAnchor),
             statusTextField.trailingAnchor.constraint(equalTo: currentStatusLabel.trailingAnchor),
             statusTextField.heightAnchor.constraint(equalToConstant: 40),
             
-            //Кнопка: под полем, отступ 8pt, ширина почти на весь экран
             setStatusButton.topAnchor.constraint(equalTo: statusTextField.bottomAnchor, constant: 8),
             setStatusButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
             setStatusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
@@ -114,7 +105,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         if !newStatus.isEmpty {
             statusText = newStatus
             currentStatusLabel.text = statusText
-            statusTextField.text = "" // очистить поле после установки
+            statusTextField.text = ""
             print("Статус установлен: \(statusText)")
         } else {
             print("Поле пустое — статус не изменён")
