@@ -1,7 +1,7 @@
 
 import UIKit
 
-class PhotosCollectionViewCell: UICollectionViewCell {
+final class PhotosCollectionViewCell: UICollectionViewCell {
     private let photoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.clipsToBounds = true

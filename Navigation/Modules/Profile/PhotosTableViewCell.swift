@@ -5,7 +5,7 @@ protocol PhotoTableViewCellDelegate: AnyObject {
     func pushVC(_ vc: UIViewController)
 }
 
-class PhotosTableViewCell: UITableViewCell {
+final class PhotosTableViewCell: UITableViewCell {
     
     private weak var delegate: PhotoTableViewCellDelegate?
     

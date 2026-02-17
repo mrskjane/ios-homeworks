@@ -1,7 +1,7 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController, UITableViewDelegate {
+final class ProfileViewController: UIViewController, UITableViewDelegate {
     
     private let profileHeaderView = ProfileHeaderView()
     

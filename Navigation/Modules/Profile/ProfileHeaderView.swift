@@ -1,6 +1,6 @@
 import UIKit
 
-class ProfileHeaderView: UITableViewHeaderFooterView {
+final class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
@@ -98,17 +98,21 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     
     @objc private func statusTextChanged(_ textField: UITextField) {
         statusText = textField.text ?? ""
+        if statusTextField.layer.borderColor == UIColor.systemRed.cgColor {
+            statusTextField.layer.borderColor = UIColor.black.cgColor
+        }
     }
     
     @objc private func didTapSetStatusButton() {
-        let newStatus = statusTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        if !newStatus.isEmpty {
-            statusText = newStatus
-            currentStatusLabel.text = statusText
+        let status = StatusService.shared.validateStatus(statusTextField.text)
+        switch status {
+        case .success(let newStatus):
+            currentStatusLabel.text = newStatus
             statusTextField.text = ""
-            print("Статус установлен: \(statusText)")
-        } else {
-            print("Поле пустое — статус не изменён")
+            statusTextField.layer.borderColor = UIColor.black.cgColor
+        case .emptyStatus:
+            statusTextField.shake()
+            statusTextField.layer.borderColor = UIColor.systemRed.cgColor
         }
     }
 }

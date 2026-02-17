@@ -1,7 +1,7 @@
 
 import UIKit
 
-class PhotosViewController: UIViewController {
+final class PhotosViewController: UIViewController {
     
     private let photos: [String]
     

@@ -1,7 +1,7 @@
 
 import UIKit
 
-class FeedViewController: UIViewController {
+final class FeedViewController: UIViewController {
     
     private let stackView: UIStackView = {
         let stackView = UIStackView()
