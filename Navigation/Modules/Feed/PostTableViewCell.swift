@@ -1,7 +1,9 @@
 
 import UIKit
 
-final class PostTableViewCell: UITableViewCell {
+class PostTableViewCell: UITableViewCell {
+    
+    @objc var onTapLikes: (() -> Void)?
     
     static var id = "PostCell"
 
@@ -36,6 +38,7 @@ final class PostTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textColor = .black
+        label.isUserInteractionEnabled = true
         
         return label
     }()
@@ -51,6 +54,7 @@ final class PostTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super .init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
+        setupGestures()
     }
     
     required init?(coder: NSCoder) {
@@ -84,12 +88,32 @@ final class PostTableViewCell: UITableViewCell {
             viewsLabel.bottomAnchor.constraint(equalTo: likesLabel.bottomAnchor)
         ])
     }
-
-        func configure(with post: Post) {
-            authorLabel.text = post.author
-            postImageView.image = UIImage(named: post.image)
-            descriptionLabel.text = post.description
-            likesLabel.text = "Likes: \(post.likes)"
-            viewsLabel.text = "Views: \(post.views)"
+    
+    private func setupGestures() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLikes))
+        likesLabel.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func didTapLikes() {
+        onTapLikes?()
+        UIView.animate(withDuration: 0.1, animations: {
+            self.likesLabel.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+        }) { _ in
+            UIView.animate(withDuration: 0.1) {
+                self.likesLabel.transform = .identity
+            }
         }
+    }
+    
+    func configure(with post: Post) {
+        authorLabel.text = post.author
+        postImageView.image = UIImage(named: post.image)
+        descriptionLabel.text = post.description
+        likesLabel.text = "Likes: \(post.likes)"
+        viewsLabel.text = "Views: \(post.views)"
+    }
+    
+    func updateLikes(count: Int) {
+        likesLabel.text = "Likes: \(count)"
+    }
 }

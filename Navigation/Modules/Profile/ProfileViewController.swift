@@ -5,7 +5,7 @@ final class ProfileViewController: UIViewController, UITableViewDelegate {
     
     private let profileHeaderView = ProfileHeaderView()
     
-    private let posts: [Post]
+    private var posts: [Post]
     
     init(posts: [Post]) {
         self.posts = posts
@@ -176,7 +176,13 @@ extension ProfileViewController: UITableViewDataSource {
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.id, for: indexPath) as! PostTableViewCell
             let post = posts[indexPath.row]
+            let postIndex = indexPath.row
             cell.configure(with: post)
+            cell.onTapLikes = { [weak self] in
+                guard let self = self else { return }
+                self.posts[postIndex].likes += 1
+                cell.updateLikes(count: self.posts[postIndex].likes)
+            }
             return cell
         }
     }
