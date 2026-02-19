@@ -7,7 +7,6 @@ final class InfoViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Показать алерт", for: .normal)
         button.addTarget(self, action: #selector(didTapShowAlertButton), for: .touchUpInside)
-
         return button
     }()
     
@@ -45,11 +44,9 @@ final class InfoViewController: UIViewController {
         
         let noAction = UIAlertAction(title: "Нет", style: .cancel) { _ in
             print("Нажата кнопка: Нет")
-        }
-        
+        }  
         alert.addAction(yesAction)
         alert.addAction(noAction)
-        
         return alert
     }
 }

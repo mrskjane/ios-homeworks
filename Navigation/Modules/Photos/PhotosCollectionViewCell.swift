@@ -6,7 +6,6 @@ final class PhotosCollectionViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
-        
         return imageView
     }()
     

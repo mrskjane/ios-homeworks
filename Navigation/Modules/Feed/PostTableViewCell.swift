@@ -3,7 +3,8 @@ import UIKit
 
 class PostTableViewCell: UITableViewCell {
     
-    @objc var onTapLikes: (() -> Void)?
+    var onTapLikes: (() -> Void)?
+    var onTapImage: (() -> Void)?
     
     static var id = "PostCell"
 
@@ -12,7 +13,6 @@ class PostTableViewCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textColor = .black
         label.numberOfLines = 2
-        
         return label
     }()
     
@@ -21,7 +21,7 @@ class PostTableViewCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .black
         imageView.clipsToBounds = true
-        
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
 
@@ -30,7 +30,6 @@ class PostTableViewCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textColor = .systemGray
         label.numberOfLines = 0
-        
         return label
     }()
 
@@ -39,7 +38,6 @@ class PostTableViewCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textColor = .black
         label.isUserInteractionEnabled = true
-        
         return label
     }()
 
@@ -47,7 +45,6 @@ class PostTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textColor = .black
-        
         return label
     }()
     
@@ -90,8 +87,10 @@ class PostTableViewCell: UITableViewCell {
     }
     
     private func setupGestures() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLikes))
-        likesLabel.addGestureRecognizer(tapGesture)
+        let likesTapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLikes))
+        let imageTapGestire = UITapGestureRecognizer(target: self, action: #selector(didTapImage))
+        likesLabel.addGestureRecognizer(likesTapGesture)
+        postImageView.addGestureRecognizer(imageTapGestire)
     }
     
     @objc private func didTapLikes() {
@@ -105,6 +104,10 @@ class PostTableViewCell: UITableViewCell {
         }
     }
     
+    @objc private func didTapImage() {
+        onTapImage?()
+    }
+    
     func configure(with post: Post) {
         authorLabel.text = post.author
         postImageView.image = UIImage(named: post.image)
@@ -115,5 +118,9 @@ class PostTableViewCell: UITableViewCell {
     
     func updateLikes(count: Int) {
         likesLabel.text = "Likes: \(count)"
+    }
+    
+    func updateViews(count: Int) {
+        viewsLabel.text = "Views: \(count)"
     }
 }

@@ -183,6 +183,13 @@ extension ProfileViewController: UITableViewDataSource {
                 self.posts[postIndex].likes += 1
                 cell.updateLikes(count: self.posts[postIndex].likes)
             }
+            cell.onTapImage = { [weak self] in
+                guard let self = self else { return }
+                self.posts[postIndex].views += 1
+                cell.updateViews(count: self.posts[postIndex].views)
+                let detailedVC = DetailedPostViewController(post: post)
+                self.navigationController?.pushViewController(detailedVC, animated: true)
+            }
             return cell
         }
     }

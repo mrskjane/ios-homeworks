@@ -13,7 +13,6 @@ final class PhotosViewController: UIViewController {
         collectionView.backgroundColor = .white
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(PhotosCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCell")
-        
         return collectionView
     }()
     
@@ -71,7 +70,6 @@ extension PhotosViewController: UICollectionViewDataSource {
 
         let imageName = photos[indexPath.item]
         cell.configure(with: imageName)
-        
         return cell
     }
 }
@@ -88,7 +86,6 @@ extension PhotosViewController: UICollectionViewDelegateFlowLayout {
             let totalSpacing = (spacing * (countOfItems + 1))
             let availableWidth = collectionView.frame.width - totalSpacing
             let itemWidth = availableWidth / countOfItems
-            
             return CGSize(width: itemWidth, height: itemWidth)
         }
         

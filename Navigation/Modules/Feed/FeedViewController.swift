@@ -9,7 +9,6 @@ final class FeedViewController: UIViewController {
         stackView.spacing = 10
         stackView.alignment = .center
         stackView.distribution = .fill
-        
         return stackView
     }()
     
@@ -21,7 +20,6 @@ final class FeedViewController: UIViewController {
         config.cornerStyle = .medium
         config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
         let button = UIButton(configuration: config)
-        
         return button
     }()
     
@@ -33,7 +31,6 @@ final class FeedViewController: UIViewController {
         config.cornerStyle = .medium
         config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
         let button = UIButton(configuration: config)
-        
         return button
     }()
     
@@ -71,13 +68,13 @@ final class FeedViewController: UIViewController {
     }
     
     @objc func didTapFirstButton() {
-        let post = Post(author: "Jane", description: "Это мой первый пост!", image: "post_image_1", likes: 30, views: 30)
+        let post = Post(author: "Jane", description: "Это мой первый пост!", detailedText: "Это мой первый пост!", image: "post_image_1", likes: 30, views: 30)
         let postVC = PostViewController(post: post)
         navigationController?.pushViewController(postVC, animated: true)
     }
     
     @objc func didTapSecondButton() {
-        let post = Post(author: "Jane", description: "Это мой второй пост!", image: "post_image_1", likes: 30, views: 30)
+        let post = Post(author: "Jane", description: "Это мой второй пост!", detailedText: "Это мой второй пост!", image: "post_image_1", likes: 30, views: 30)
         let postVC = PostViewController(post: post)
         navigationController?.pushViewController(postVC, animated: true)
     }
