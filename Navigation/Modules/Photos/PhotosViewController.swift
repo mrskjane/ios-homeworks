@@ -12,15 +12,6 @@ final class PhotosViewController: UIViewController {
           return view
       }()
       
-//      private lazy var closeButton: UIButton = {
-//          let button = UIButton(type: .custom)
-//          button.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-//          button.tintColor = .white
-//          button.alpha = 0
-//          button.addTarget(self, action: #selector(closeFullScreenImage), for: .touchUpInside)
-//          return button
-//      }()
-      
       private let animatingImageView: UIImageView = {
           let imageView = UIImageView()
           imageView.contentMode = .scaleAspectFill
@@ -28,7 +19,6 @@ final class PhotosViewController: UIViewController {
           return imageView
       }()
       
-    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -88,18 +78,12 @@ final class PhotosViewController: UIViewController {
             dimmingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             dimmingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             dimmingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-//            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-//            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-//            closeButton.widthAnchor.constraint(equalToConstant: 44),
-//            closeButton.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
     
     private func showFullScreenImage(image: UIImage, initialRect: CGRect) {
         animatingImageView.image = image
         view.addSubviews([animatingImageView])
-//        view.bringSubviewToFront(closeButton)
         
         NSLayoutConstraint.deactivate(initialConstraints)
         initialConstraints = [
@@ -128,16 +112,14 @@ final class PhotosViewController: UIViewController {
             self.dimmingView.alpha = 0.8
             self.view.layoutIfNeeded()
         } completion: { _ in
-//            UIView.animate(withDuration: 0.3) {
-////                self.closeButton.alpha = 1
-//            }
-            let closeItem = UIBarButtonItem(
-                        image: UIImage(systemName: "xmark"),
-                        style: .plain,
-                        target: self,
-                        action: #selector(self.closeFullScreenImage)
-            )
-                   self.navigationItem.rightBarButtonItem = closeItem
+                let closeItem = UIBarButtonItem(
+                    image: UIImage(systemName: "xmark"),
+                    style: .plain,
+                    target: self,
+                    action: #selector(self.closeFullScreenImage)
+                )
+                self.navigationItem.rightBarButtonItem = closeItem
+                self.navigationController?.navigationBar.layoutIfNeeded()
         }
     }
     

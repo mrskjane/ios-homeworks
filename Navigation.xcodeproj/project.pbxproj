@@ -110,6 +110,7 @@
 			children = (
 				5CF871A32ED1E479001EE926 /* Assets.xcassets */,
 				5CF871A52ED1E479001EE926 /* Info.plist */,
+				5C929CF22F43429000C5B522 /* User.json */,
 				5CF871A82ED1E479001EE926 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
@@ -120,7 +121,6 @@
 			children = (
 				5CF871A92ED1E479001EE926 /* Post.swift */,
 				5CE1EB472EFDC3A500425751 /* Photo.swift */,
-				5C929CF22F43429000C5B522 /* User.json */,
 				5C929CF42F43431300C5B522 /* User.swift */,
 			);
 			path = Models;
@@ -130,7 +130,6 @@
 			isa = PBXGroup;
 			children = (
 				5CF871A42ED1E479001EE926 /* FeedViewController.swift */,
-				5C59387A2EED36D000C6E92B /* PostTableViewCell.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -165,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				5CF871AA2ED1E479001EE926 /* PostViewController.swift */,
+				5C59387A2EED36D000C6E92B /* PostTableViewCell.swift */,
 				5C929CFA2F4639D200C5B522 /* DetailedPostViewController.swift */,
 			);
 			path = Post;

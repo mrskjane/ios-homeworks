@@ -40,6 +40,7 @@ final class ProfileViewController: UIViewController, UITableViewDelegate {
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.tintColor = .white
         button.alpha = 0
+        button.isUserInteractionEnabled = true
         return button
     }()
     
@@ -58,7 +59,7 @@ final class ProfileViewController: UIViewController, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
+        setupLayout()
         setupGestures()
     }
     
@@ -67,7 +68,7 @@ final class ProfileViewController: UIViewController, UITableViewDelegate {
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
-    func setupUI() {
+    func setupLayout() {
         view.backgroundColor = .systemGray6
         view.addSubviews([tableView, dimmingView, closeButton])
         NSLayoutConstraint.activate([
@@ -162,7 +163,6 @@ extension ProfileViewController: UITableViewDataSource {
             return 1
         default:
             return posts.count
-            
         }
     }
     

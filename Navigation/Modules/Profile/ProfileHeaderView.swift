@@ -39,7 +39,6 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         textField.layer.cornerRadius = 12
         textField.layer.masksToBounds = true
         textField.placeholder = "Введите новый статус..."
-        
         return textField
     }()
     
