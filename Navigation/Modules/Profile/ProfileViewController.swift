@@ -144,7 +144,6 @@ final class ProfileViewController: UIViewController, UITableViewDelegate {
                 if self.avatarImageView.superview == self.view {
                     self.profileHeaderView.contentView.addSubview(self.avatarImageView)
                     NSLayoutConstraint.activate(self.initialConstraints)
-                    //self.activateInitialConstraints()
                 }
             }
         }

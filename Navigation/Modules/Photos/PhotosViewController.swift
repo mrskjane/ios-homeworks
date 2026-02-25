@@ -5,6 +5,30 @@ final class PhotosViewController: UIViewController {
     
     private let photos: [String]
     
+    private let dimmingView: UIView = {
+          let view = UIView()
+          view.backgroundColor = .black
+          view.alpha = 0
+          return view
+      }()
+      
+//      private lazy var closeButton: UIButton = {
+//          let button = UIButton(type: .custom)
+//          button.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+//          button.tintColor = .white
+//          button.alpha = 0
+//          button.addTarget(self, action: #selector(closeFullScreenImage), for: .touchUpInside)
+//          return button
+//      }()
+      
+      private let animatingImageView: UIImageView = {
+          let imageView = UIImageView()
+          imageView.contentMode = .scaleAspectFill
+          imageView.clipsToBounds = true
+          return imageView
+      }()
+      
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -15,6 +39,9 @@ final class PhotosViewController: UIViewController {
         collectionView.register(PhotosCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCell")
         return collectionView
     }()
+    
+    private var initialConstraints: [NSLayoutConstraint] = []
+    private var finalConstraints: [NSLayoutConstraint] = []
     
     init(photos: [String]) {
         self.photos = photos
@@ -49,14 +76,89 @@ final class PhotosViewController: UIViewController {
      }
     
     private func setupLayout() {
-        view.addSubviews([collectionView])
+        view.addSubviews([collectionView, dimmingView])
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            dimmingView.topAnchor.constraint(equalTo: view.topAnchor),
+            dimmingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            dimmingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            dimmingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+//            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+//            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+//            closeButton.widthAnchor.constraint(equalToConstant: 44),
+//            closeButton.heightAnchor.constraint(equalToConstant: 44)
         ])
+    }
+    
+    private func showFullScreenImage(image: UIImage, initialRect: CGRect) {
+        animatingImageView.image = image
+        view.addSubviews([animatingImageView])
+//        view.bringSubviewToFront(closeButton)
+        
+        NSLayoutConstraint.deactivate(initialConstraints)
+        initialConstraints = [
+            animatingImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: initialRect.origin.y),
+            animatingImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: initialRect.origin.x),
+            animatingImageView.widthAnchor.constraint(equalToConstant: initialRect.width),
+            animatingImageView.heightAnchor.constraint(equalToConstant: initialRect.height)
+        ]
+        NSLayoutConstraint.activate(initialConstraints)
+        view.layoutIfNeeded()
+
+        if finalConstraints.isEmpty {
+            finalConstraints = [
+                animatingImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                animatingImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                animatingImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+                animatingImageView.heightAnchor.constraint(equalTo: view.widthAnchor)
+            ]
+        }
+
+        NSLayoutConstraint.deactivate(initialConstraints)
+        NSLayoutConstraint.activate(finalConstraints)
+        view.setNeedsLayout()
+
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut) {
+            self.dimmingView.alpha = 0.8
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+//            UIView.animate(withDuration: 0.3) {
+////                self.closeButton.alpha = 1
+//            }
+            let closeItem = UIBarButtonItem(
+                        image: UIImage(systemName: "xmark"),
+                        style: .plain,
+                        target: self,
+                        action: #selector(self.closeFullScreenImage)
+            )
+                   self.navigationItem.rightBarButtonItem = closeItem
+        }
+    }
+    
+    @objc private func closeFullScreenImage() {
+        navigationItem.rightBarButtonItem = nil
+        NSLayoutConstraint.deactivate(self.finalConstraints)
+        NSLayoutConstraint.activate(self.initialConstraints)
+        self.view.setNeedsLayout()
+        
+        UIView.animate(withDuration: 0.5,
+                       delay: 0,
+                       options: .curveEaseInOut) {
+            self.dimmingView.alpha = 0
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+            self.animatingImageView.removeFromSuperview()
+            self.animatingImageView.image = nil
+            NSLayoutConstraint.deactivate(self.initialConstraints)
+            self.initialConstraints.removeAll()
+            self.finalConstraints.removeAll()
+        }
     }
 }
 
@@ -71,6 +173,15 @@ extension PhotosViewController: UICollectionViewDataSource {
         let imageName = photos[indexPath.item]
         cell.configure(with: imageName)
         return cell
+    }
+}
+
+extension PhotosViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? PhotosCollectionViewCell,
+              let image = cell.photoImageView.image else { return }
+        let cellRect = cell.convert(cell.bounds, to: view)
+        showFullScreenImage(image: image, initialRect: cellRect)
     }
 }
 
