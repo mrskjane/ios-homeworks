@@ -131,7 +131,7 @@
 		5C629D132F127769005E4866 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
-				5CF871A42ED1E479001EE926 /* FeedViewController.swift */,
+				5C83FF642F55773400418177 /* Controllers */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -139,9 +139,8 @@
 		5C629D142F12778F005E4866 /* LogIn */ = {
 			isa = PBXGroup;
 			children = (
-				5C929CF62F4343A900C5B522 /* AuthService.swift */,
-				5C83FF5F2F54C1A300418177 /* EmailValidator.swift */,
-				5C24892C2EE33EC50013D761 /* LogInViewController.swift */,
+				5C83FF6B2F5577CF00418177 /* Services */,
+				5C83FF6A2F5577C800418177 /* Controllers */,
 			);
 			path = LogIn;
 			sourceTree = "<group>";
@@ -149,8 +148,8 @@
 		5C629D152F1277C4005E4866 /* Photos */ = {
 			isa = PBXGroup;
 			children = (
-				5CE1EB432EF8372F00425751 /* PhotosViewController.swift */,
-				5CE1EB452EF9364100425751 /* PhotosCollectionViewCell.swift */,
+				5C83FF692F5577A500418177 /* Views */,
+				5C83FF682F55779D00418177 /* Controllers */,
 			);
 			path = Photos;
 			sourceTree = "<group>";
@@ -158,7 +157,7 @@
 		5C629D162F12780A005E4866 /* Info */ = {
 			isa = PBXGroup;
 			children = (
-				5CF871A62ED1E479001EE926 /* InfoViewController.swift */,
+				5C83FF652F55776200418177 /* Controllers */,
 			);
 			path = Info;
 			sourceTree = "<group>";
@@ -166,9 +165,8 @@
 		5C629D172F12781E005E4866 /* Post */ = {
 			isa = PBXGroup;
 			children = (
-				5CF871AA2ED1E479001EE926 /* PostViewController.swift */,
-				5C59387A2EED36D000C6E92B /* PostTableViewCell.swift */,
-				5C929CFA2F4639D200C5B522 /* DetailedPostViewController.swift */,
+				5C83FF672F55778800418177 /* Views */,
+				5C83FF662F55777F00418177 /* Controllers */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -186,13 +184,103 @@
 			path = Modules;
 			sourceTree = "<group>";
 		};
-		5CF871A12ED1E479001EE926 /* Profile */ = {
+		5C83FF612F5576A200418177 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5CF871A02ED1E479001EE926 /* ProfileViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		5C83FF622F5576B100418177 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				5CF8719F2ED1E479001EE926 /* ProfileHeaderView.swift */,
-				5C929CF82F44A1BE00C5B522 /* StatusService.swift */,
-				5CF871A02ED1E479001EE926 /* ProfileViewController.swift */,
 				5CE1EB412EF598D900425751 /* PhotosTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5C83FF632F5576B900418177 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				5C929CF82F44A1BE00C5B522 /* StatusService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		5C83FF642F55773400418177 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5CF871A42ED1E479001EE926 /* FeedViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		5C83FF652F55776200418177 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5CF871A62ED1E479001EE926 /* InfoViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		5C83FF662F55777F00418177 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5CF871AA2ED1E479001EE926 /* PostViewController.swift */,
+				5C929CFA2F4639D200C5B522 /* DetailedPostViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		5C83FF672F55778800418177 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5C59387A2EED36D000C6E92B /* PostTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5C83FF682F55779D00418177 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5CE1EB432EF8372F00425751 /* PhotosViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		5C83FF692F5577A500418177 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5CE1EB452EF9364100425751 /* PhotosCollectionViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5C83FF6A2F5577C800418177 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5C24892C2EE33EC50013D761 /* LogInViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		5C83FF6B2F5577CF00418177 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				5C929CF62F4343A900C5B522 /* AuthService.swift */,
+				5C83FF5F2F54C1A300418177 /* EmailValidator.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		5CF871A12ED1E479001EE926 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				5C83FF632F5576B900418177 /* Services */,
+				5C83FF622F5576B100418177 /* Views */,
+				5C83FF612F5576A200418177 /* Controllers */,
 			);
 			path = Profile;
 			sourceTree = "<group>";

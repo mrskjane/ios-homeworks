@@ -185,8 +185,9 @@ extension ProfileViewController: UITableViewDataSource {
             cell.onTapImage = { [weak self] in
                 guard let self = self else { return }
                 self.posts[postIndex].views += 1
+                let updatedPost = self.posts[postIndex]
                 cell.updateViews(count: self.posts[postIndex].views)
-                let detailedVC = DetailedPostViewController(post: post)
+                let detailedVC = DetailedPostViewController(post: updatedPost)
                 self.navigationController?.pushViewController(detailedVC, animated: true)
             }
             return cell
