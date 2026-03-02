@@ -7,15 +7,6 @@ final class ProfileViewController: UIViewController, UITableViewDelegate {
     
     private var posts: [Post]
     
-    init(posts: [Post]) {
-        self.posts = posts
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     private let avatarImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -56,6 +47,15 @@ final class ProfileViewController: UIViewController, UITableViewDelegate {
     
     private var initialConstraints: [NSLayoutConstraint] = []
     private var finalConstraints: [NSLayoutConstraint] = []
+    
+    init(posts: [Post]) {
+        self.posts = posts
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -249,6 +249,11 @@ extension ProfileViewController {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        view.endEditing(true)
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        view.endEditing(true)
     }
 }
 

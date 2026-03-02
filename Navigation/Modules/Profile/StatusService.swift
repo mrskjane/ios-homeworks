@@ -1,22 +1,21 @@
 
 import Foundation
 
-enum StatusResult {
-    case success(newStatus: String)
-    case emptyStatus
+enum StatusError: Error {
+    case empty
 }
 
 final class StatusService {
     static let shared = StatusService()
     private init() {}
     
-    func validateStatus(_ status: String?) -> StatusResult {
+    func validateStatus(_ status: String?) throws -> String {
         let trimmedStatus = status?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        
         if trimmedStatus.isEmpty {
-            return .emptyStatus
-        } else {
-            return .success(newStatus: trimmedStatus)
+            throw StatusError.empty
         }
+        return trimmedStatus
     }
 }
 

@@ -56,8 +56,6 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         return button
     }()
     
-    private var statusText: String = "Listening to music"
-    
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         setupLayout()
@@ -96,22 +94,23 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     }
     
     @objc private func statusTextChanged(_ textField: UITextField) {
-        statusText = textField.text ?? ""
         if statusTextField.layer.borderColor == UIColor.systemRed.cgColor {
             statusTextField.layer.borderColor = UIColor.black.cgColor
         }
     }
     
     @objc private func didTapSetStatusButton() {
-        let status = StatusService.shared.validateStatus(statusTextField.text)
-        switch status {
-        case .success(let newStatus):
+        do {
+            let newStatus = try StatusService.shared.validateStatus(statusTextField.text)
             currentStatusLabel.text = newStatus
             statusTextField.text = ""
             statusTextField.layer.borderColor = UIColor.black.cgColor
-        case .emptyStatus:
+            
+        } catch StatusError.empty {
             statusTextField.shake()
             statusTextField.layer.borderColor = UIColor.systemRed.cgColor
+        } catch {
+            print("Произошла неизвестная ошибка: \(error)")
         }
     }
 }

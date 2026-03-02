@@ -4,16 +4,24 @@ import UIKit
 class DetailedPostViewController: UIViewController {
     
     private let post: Post
-
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        return scrollView
-    }()
     
-    private let contentView: UIView = {
-        let view = UIView()
-        return view
+    private let likesLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.textColor = .black
+        return label
     }()
+
+    private let viewsLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.textColor = .black
+        return label
+    }()
+
+    private let scrollView: UIScrollView = UIScrollView()
+    
+    private let contentView: UIView = UIView()
 
     private let authorLabel: UILabel = {
         let label = UILabel()
@@ -66,11 +74,13 @@ class DetailedPostViewController: UIViewController {
         authorLabel.text = post.author
         postImageView.image = UIImage(named: post.image)
         detailedDescriptionLabel.text = post.detailedText
+        likesLabel.text = "Likes: \(post.likes)"
+        viewsLabel.text = "Views: \(post.views)"
     }
 
     private func setupLayout() {
         view.addSubviews([scrollView])
-        scrollView.addSubviews([contentView, authorLabel, postImageView, detailedDescriptionLabel])
+        scrollView.addSubviews([contentView, authorLabel, postImageView, detailedDescriptionLabel, likesLabel, viewsLabel])
         let padding: CGFloat = 16
         
         NSLayoutConstraint.activate([
@@ -97,7 +107,14 @@ class DetailedPostViewController: UIViewController {
             detailedDescriptionLabel.topAnchor.constraint(equalTo: postImageView.bottomAnchor, constant: padding),
             detailedDescriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             detailedDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            detailedDescriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding)
+            
+            likesLabel.topAnchor.constraint(equalTo: detailedDescriptionLabel.bottomAnchor, constant: padding),
+            likesLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+
+            viewsLabel.topAnchor.constraint(equalTo: likesLabel.topAnchor),
+            viewsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
+            
+            likesLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding)
         ])
     }
 }

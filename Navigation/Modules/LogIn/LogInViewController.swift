@@ -45,17 +45,18 @@ final class LogInViewController: UIViewController {
         return textField
     }()
     
-    private let passwordTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Password"
-        textField.font = UIFont.systemFont(ofSize: 16)
-        textField.textColor = .black
-        textField.tintColor = UIColor(named: "AccentColor")
-        textField.autocapitalizationType = .none
-        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
-        textField.leftViewMode = .always
-        textField.isSecureTextEntry = true
-        return textField
+    private lazy var passwordTextField: UITextField = {
+        let passwordTextField = UITextField()
+        passwordTextField.placeholder = "Password"
+        passwordTextField.font = UIFont.systemFont(ofSize: 16)
+        passwordTextField.textColor = .black
+        passwordTextField.tintColor = UIColor(named: "AccentColor")
+        passwordTextField.autocapitalizationType = .none
+        passwordTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
+        passwordTextField.leftViewMode = .always
+        passwordTextField.isSecureTextEntry = true
+        passwordTextField.addTarget(self, action: #selector(textFieldsChanged), for: .editingChanged)
+        return passwordTextField
     }()
 
     private let separatorView: UIView = {
@@ -66,17 +67,18 @@ final class LogInViewController: UIViewController {
     }()
 
     private lazy var logInButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Log in", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        button.setTitleColor(.white, for: .normal)
+        let loginTextField = UIButton(type: .system)
+        loginTextField.setTitle("Log in", for: .normal)
+        loginTextField.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        loginTextField.setTitleColor(.white, for: .normal)
     
         let bluePixelImage = UIImage(named: "blue_pixel")
-        button.setBackgroundImage(bluePixelImage, for: .normal)
-        button.layer.cornerRadius = 10
-        button.clipsToBounds = true
-        button.addTarget(self, action: #selector(logInButtonTapped), for: .touchUpInside)
-        return button
+        loginTextField.setBackgroundImage(bluePixelImage, for: .normal)
+        loginTextField.layer.cornerRadius = 10
+        loginTextField.clipsToBounds = true
+        loginTextField.addTarget(self, action: #selector(logInButtonTapped), for: .touchUpInside)
+        loginTextField.addTarget(self, action: #selector(textFieldsChanged), for: .editingChanged)
+        return loginTextField
     }()
     
     private let passwordHintLabel: UILabel = {
@@ -94,7 +96,6 @@ final class LogInViewController: UIViewController {
         view.backgroundColor = .white
         setupLayout()
         setupGesture()
-        passwordTextField.addTarget(self, action: #selector(passwordChanged), for: .editingChanged)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -168,39 +169,36 @@ final class LogInViewController: UIViewController {
     }
 
     @objc private func logInButtonTapped() {
-        let result = LoginService.shared.authorize(
-            login: loginTextField.text,
-            pass: passwordTextField.text
-        )
-        
-        switch result {
-            
-        case .success:
+        do {
+            try AuthService.shared.authorize(
+                login: loginTextField.text,
+                pass: passwordTextField.text
+            )
             passwordHintLabel.isHidden = true
             let profileVC = ProfileViewController(posts: Post.makeMockPosts())
             navigationController?.pushViewController(profileVC, animated: true)
-            
-        case .emptyLogin:
+        } catch AuthError.bothEmpty {
+            stackView.shake()
+            stackView.layer.borderWidth = 1
+            stackView.layer.borderColor = UIColor.systemRed.cgColor
+        } catch AuthError.emptyLogin {
             loginTextField.shake()
-            
-        case .emptyPassword:
-            passwordTextField.shake()
-            passwordHintLabel.isHidden = true
-            
-        case .shortPassword:
+        } catch AuthError.invalidEmail {
+            loginTextField.shake()
+            showAlert(message: "Некорректный формат e-mail")
+        } catch AuthError.shortPassword {
             passwordTextField.shake()
             passwordHintLabel.isHidden = false
-            
-        case .wrongCredentials:
-            passwordHintLabel.isHidden = true
+        } catch AuthError.wrongCredentials {
             showAlert(message: "Неверный логин или пароль")
-        case .invalidEmail:
-            loginTextField.shake()
-            showAlert(message: "Введите корректный адрес электронной почты (например, name@mail.com)")
+        } catch {
+            showAlert(message: "Что-то пошло не так")
         }
     }
     
-    @objc private func passwordChanged() {
+    @objc private func textFieldsChanged() {
+        stackView.layer.borderColor = UIColor.lightGray.cgColor
+        stackView.layer.borderWidth = 0.5
         if !passwordHintLabel.isHidden {
             passwordHintLabel.isHidden = true
         }
