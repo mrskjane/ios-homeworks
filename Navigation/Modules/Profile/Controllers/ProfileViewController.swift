@@ -7,18 +7,6 @@ final class ProfileViewController: UIViewController, UITableViewDelegate {
     
     private var posts: [Post]
     
-    private let avatarImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 50
-        imageView.layer.borderWidth = 3
-        imageView.layer.borderColor = UIColor.white.cgColor
-        imageView.image = UIImage(named: "cat")
-        imageView.isUserInteractionEnabled = true
-        return imageView
-    }()
-    
     private let dimmingView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
@@ -89,61 +77,52 @@ final class ProfileViewController: UIViewController, UITableViewDelegate {
     
     private func setupGestures() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateAvatar))
-        avatarImageView.addGestureRecognizer(tapGesture)
+        profileHeaderView.avatarImageView.addGestureRecognizer(tapGesture)
     }
     
     @objc private func animateAvatar() {
-        view.addSubviews([avatarImageView])
-        NSLayoutConstraint.deactivate(initialConstraints)
-        if initialConstraints.isEmpty {
-            initialConstraints = [
-                avatarImageView.topAnchor.constraint(equalTo: profileHeaderView.contentView.topAnchor, constant: 16),
-                avatarImageView.leadingAnchor.constraint(equalTo: profileHeaderView.contentView.leadingAnchor, constant: 16),
-                avatarImageView.widthAnchor.constraint(equalToConstant: 100),
-                avatarImageView.heightAnchor.constraint(equalToConstant: 100)
-            ]
-        }
-        NSLayoutConstraint.activate(initialConstraints)
-        view.setNeedsLayout()
-        view.layoutIfNeeded()
-        
-        NSLayoutConstraint.deactivate(initialConstraints)
+        let avatar = profileHeaderView.avatarImageView
+        view.addSubviews([avatar])
+        NSLayoutConstraint.activate(profileHeaderView.avatarConstraints)
+               view.layoutIfNeeded()
         if finalConstraints.isEmpty {
-            finalConstraints = [
-                avatarImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                avatarImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-                avatarImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
-                avatarImageView.heightAnchor.constraint(equalTo: view.widthAnchor)
-            ]
+                    finalConstraints = [
+                        avatar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                        avatar.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                        avatar.widthAnchor.constraint(equalTo: view.widthAnchor),
+                        avatar.heightAnchor.constraint(equalTo: view.widthAnchor)
+                    ]
         }
+        NSLayoutConstraint.deactivate(profileHeaderView.avatarConstraints)
         NSLayoutConstraint.activate(finalConstraints)
-        
-        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+        view.setNeedsLayout()
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut) {
             self.dimmingView.alpha = 0.75
-            self.avatarImageView.layer.cornerRadius = 0
+            avatar.layer.cornerRadius = 0
             self.view.layoutIfNeeded()
-        }) { _ in
-            UIView.animate(withDuration: 0.3) {
-                self.closeButton.alpha = 1
-            }
+        } completion: { _ in
+            UIView.animate(withDuration: 0.3) { self.closeButton.alpha = 1 }
         }
     }
     
     @objc private func closeAvatarView() {
+        let avatar = profileHeaderView.avatarImageView
         UIView.animate(withDuration: 0, animations: {
             self.closeButton.alpha = 0
         }) { _ in
             NSLayoutConstraint.deactivate(self.finalConstraints)
-            NSLayoutConstraint.activate(self.initialConstraints)
+            NSLayoutConstraint.activate(self.profileHeaderView.avatarConstraints)
+            self.view.setNeedsLayout()
             UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
                 self.dimmingView.alpha = 0
-                self.avatarImageView.layer.cornerRadius = 50
-                self.view.setNeedsLayout()
+                avatar.layer.cornerRadius = 50
                 self.view.layoutIfNeeded()
             }) { _ in
-                if self.avatarImageView.superview == self.view {
-                    self.profileHeaderView.contentView.addSubview(self.avatarImageView)
+                if avatar.superview == self.view {
+                    self.profileHeaderView.contentView.addSubview(avatar)
                     NSLayoutConstraint.activate(self.initialConstraints)
+                    self.profileHeaderView.contentView.setNeedsLayout()
+                    self.profileHeaderView.contentView.layoutIfNeeded()
                 }
             }
         }
@@ -211,23 +190,8 @@ extension ProfileViewController: UITableViewDataSource {
 extension ProfileViewController {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            let header = profileHeaderView
-            if avatarImageView.superview != self.view {
-                header.contentView.addSubviews([avatarImageView])
-                if initialConstraints.isEmpty {
-                    initialConstraints = [
-                        avatarImageView.topAnchor.constraint(equalTo: profileHeaderView.contentView.topAnchor, constant: 16),
-                        avatarImageView.leadingAnchor.constraint(equalTo: profileHeaderView.contentView.leadingAnchor, constant: 16),
-                        avatarImageView.widthAnchor.constraint(equalToConstant: 100),
-                        avatarImageView.heightAnchor.constraint(equalToConstant: 100)
-                    ]
-                }
-                NSLayoutConstraint.activate(initialConstraints)
-            }
-            return header
-        }
-        return nil
+        guard section == 0 else { return nil }
+        return profileHeaderView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

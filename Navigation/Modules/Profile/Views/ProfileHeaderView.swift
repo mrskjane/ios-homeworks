@@ -14,6 +14,8 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         return imageView
     }()
     
+    var avatarConstraints: [NSLayoutConstraint] = []
+    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Hipster Cat"
@@ -79,9 +81,17 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     
     private func setupLayout() {
         backgroundColor = .lightGray
-        contentView.addSubviews([nameLabel, currentStatusLabel, statusTextField, setStatusButton])
+        contentView.addSubviews([avatarImageView, nameLabel, currentStatusLabel, statusTextField, setStatusButton])
         statusTextField.addTarget(self, action: #selector(statusTextChanged(_:)), for: .editingChanged)
         setStatusButton.addTarget(self, action: #selector(didTapSetStatusButton), for: .touchUpInside)
+        
+        avatarConstraints = [
+            avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            avatarImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            avatarImageView.widthAnchor.constraint(equalToConstant: 100),
+            avatarImageView.heightAnchor.constraint(equalToConstant: 100)
+        ]
+        NSLayoutConstraint.activate(avatarConstraints)
         
         NSLayoutConstraint.activate([
             nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 27),
