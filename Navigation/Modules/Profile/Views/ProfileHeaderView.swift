@@ -2,6 +2,18 @@ import UIKit
 
 final class ProfileHeaderView: UITableViewHeaderFooterView {
     
+    let avatarImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 50
+        imageView.layer.borderWidth = 3
+        imageView.layer.borderColor = UIColor.white.cgColor
+        imageView.image = UIImage(named: "cat")
+        imageView.isUserInteractionEnabled = true
+        return imageView
+    }()
+    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Hipster Cat"
@@ -94,9 +106,8 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     }
     
     @objc private func statusTextChanged(_ textField: UITextField) {
-        if statusTextField.layer.borderColor == UIColor.systemRed.cgColor {
+        guard statusTextField.layer.borderColor == UIColor.systemRed.cgColor else { return }
             statusTextField.layer.borderColor = UIColor.black.cgColor
-        }
     }
     
     @objc private func didTapSetStatusButton() {

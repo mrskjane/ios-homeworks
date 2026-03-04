@@ -26,12 +26,11 @@ final class ProfileViewController: UIViewController, UITableViewDelegate {
         return view
     }()
     
-    private var closeButton: UIButton = {
+    private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.tintColor = .white
         button.alpha = 0
-        button.isUserInteractionEnabled = true
         return button
     }()
     
@@ -259,7 +258,9 @@ extension ProfileViewController {
 }
 
 extension ProfileViewController: PhotoTableViewCellDelegate {
-    func pushVC(_ vc: UIViewController) {
-        navigationController?.pushViewController(vc, animated: true)
+    func didTapPhotosArrow() {
+        let photos = Photo.makeMockPhotos()
+        let photoVC = PhotosViewController(photos: photos)
+        navigationController?.pushViewController(photoVC, animated: true)
     }
 }

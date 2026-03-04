@@ -2,14 +2,14 @@
 import UIKit
 
 protocol PhotoTableViewCellDelegate: AnyObject {
-    func pushVC(_ vc: UIViewController)
+    func didTapPhotosArrow()
 }
 
 final class PhotosTableViewCell: UITableViewCell {
     
     private weak var delegate: PhotoTableViewCellDelegate?
     
-    static var id = "PhotosTableViewCell"
+    static let id = "PhotosTableViewCell"
     
     private let photosLabel: UILabel = {
         let label = UILabel()
@@ -21,10 +21,11 @@ final class PhotosTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let arrowButton: UIButton = {
+    private lazy var arrowButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "arrow.right"), for: .normal)
         button.tintColor = .black
+        button.addTarget(self, action: #selector(arrowTapped), for: .touchUpInside)
         
         return button
     }()
@@ -93,8 +94,6 @@ final class PhotosTableViewCell: UITableViewCell {
     }
     
     @objc private func arrowTapped() {
-                let photos = Photo.makeMockPhotos()
-                let photoVC = PhotosViewController(photos: photos)
-                self.delegate?.pushVC(photoVC)
+                self.delegate?.didTapPhotosArrow()
     }
 }
