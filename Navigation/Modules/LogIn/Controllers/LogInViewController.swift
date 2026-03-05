@@ -33,7 +33,7 @@ final class LogInViewController: UIViewController {
         return stack
     }()
     
-    private let loginTextField: UITextField = {
+    private lazy var loginTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Email or phone"
         textField.font = UIFont.systemFont(ofSize: 16)
@@ -42,6 +42,7 @@ final class LogInViewController: UIViewController {
         textField.autocapitalizationType = .none
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
         textField.leftViewMode = .always
+        textField.addTarget(self, action: #selector(textFieldsChanged), for: .editingChanged)
         return textField
     }()
     
@@ -77,7 +78,6 @@ final class LogInViewController: UIViewController {
         loginTextField.layer.cornerRadius = 10
         loginTextField.clipsToBounds = true
         loginTextField.addTarget(self, action: #selector(logInButtonTapped), for: .touchUpInside)
-        loginTextField.addTarget(self, action: #selector(textFieldsChanged), for: .editingChanged)
         return loginTextField
     }()
     
@@ -168,12 +168,19 @@ final class LogInViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 
+    private func resetBorders() {
+        stackView.layer.borderWidth = 0.5
+        stackView.layer.borderColor = UIColor.lightGray.cgColor
+        separatorView.backgroundColor = .lightGray
+    }
+    
     @objc private func logInButtonTapped() {
         do {
             try AuthService.shared.authorize(
                 login: loginTextField.text,
                 pass: passwordTextField.text
             )
+            resetBorders()
             passwordHintLabel.isHidden = true
             let profileVC = ProfileViewController(posts: Post.makeMockPosts())
             navigationController?.pushViewController(profileVC, animated: true)
@@ -181,8 +188,11 @@ final class LogInViewController: UIViewController {
             stackView.shake()
             stackView.layer.borderWidth = 1
             stackView.layer.borderColor = UIColor.systemRed.cgColor
+            separatorView.backgroundColor = .systemRed
         } catch AuthError.emptyLogin {
             loginTextField.shake()
+        } catch AuthError.emptyPassword {
+            passwordTextField.shake()
         } catch AuthError.invalidEmail {
             loginTextField.shake()
             showAlert(message: "Некорректный формат e-mail")
@@ -197,8 +207,7 @@ final class LogInViewController: UIViewController {
     }
     
     @objc private func textFieldsChanged() {
-        stackView.layer.borderColor = UIColor.lightGray.cgColor
-        stackView.layer.borderWidth = 0.5
+        resetBorders()
         if !passwordHintLabel.isHidden {
             passwordHintLabel.isHidden = true
         }

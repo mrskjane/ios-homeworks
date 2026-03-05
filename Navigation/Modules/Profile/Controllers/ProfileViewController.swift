@@ -155,13 +155,13 @@ extension ProfileViewController: UITableViewDataSource {
             let post = posts[indexPath.row]
             let postIndex = indexPath.row
             cell.configure(with: post)
-            cell.onTapLikes = { [weak self] in
-                guard let self = self else { return }
+            cell.onTapLikes = { [weak self, weak cell] in
+                guard let self = self, let cell = cell else { return }
                 self.posts[postIndex].likes += 1
                 cell.updateLikes(count: self.posts[postIndex].likes)
             }
-            cell.onTapImage = { [weak self] in
-                guard let self = self else { return }
+            cell.onTapImage = { [weak self, weak cell] in
+                guard let self = self, let cell = cell else { return }
                 self.posts[postIndex].views += 1
                 let updatedPost = self.posts[postIndex]
                 cell.updateViews(count: self.posts[postIndex].views)

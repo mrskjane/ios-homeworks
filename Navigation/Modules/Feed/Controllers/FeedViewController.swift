@@ -48,7 +48,6 @@ final class FeedViewController: UIViewController {
     }
     
     private func setupLayout() {
-    
         NSLayoutConstraint.activate([
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
