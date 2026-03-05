@@ -3,8 +3,8 @@ import UIKit
 
 final class FeedViewController: UIViewController {
     
-    private let stackView: UIStackView = {
-        let stackView = UIStackView()
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [firstButton, secondButton])
         stackView.axis = .vertical
         stackView.spacing = 10
         stackView.alignment = .center
@@ -36,16 +36,9 @@ final class FeedViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupStackView()
         setupActions()
         setupView()
         setupLayout()
-    }
-    
-    private func setupStackView() {
-        stackView.addArrangedSubview(firstButton)
-        stackView.addArrangedSubview(secondButton)
     }
     
     private func setupView() {
