@@ -3,7 +3,12 @@ import UIKit
 
 final class ProfileViewController: UIViewController, UITableViewDelegate {
     
-    private let profileHeaderView = ProfileHeaderView()
+    private lazy var profileHeaderView: ProfileHeaderView = {
+        let headerView = ProfileHeaderView()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateAvatar))
+        headerView.avatarImageView.addGestureRecognizer(tapGesture)
+        return headerView
+    }()
     
     private var posts: [Post]
     
@@ -47,7 +52,6 @@ final class ProfileViewController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
-        setupGestures()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,23 +79,18 @@ final class ProfileViewController: UIViewController, UITableViewDelegate {
         closeButton.addTarget(self, action: #selector(closeAvatarView), for: .touchUpInside)
     }
     
-    private func setupGestures() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateAvatar))
-        profileHeaderView.avatarImageView.addGestureRecognizer(tapGesture)
-    }
-    
     @objc private func animateAvatar() {
         let avatar = profileHeaderView.avatarImageView
         view.addSubviews([avatar])
         NSLayoutConstraint.activate(profileHeaderView.avatarConstraints)
-               view.layoutIfNeeded()
+        view.layoutIfNeeded()
         if finalConstraints.isEmpty {
-                    finalConstraints = [
-                        avatar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                        avatar.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-                        avatar.widthAnchor.constraint(equalTo: view.widthAnchor),
-                        avatar.heightAnchor.constraint(equalTo: view.widthAnchor)
-                    ]
+            finalConstraints = [
+                avatar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                avatar.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                avatar.widthAnchor.constraint(equalTo: view.widthAnchor),
+                avatar.heightAnchor.constraint(equalTo: view.widthAnchor)
+            ]
         }
         NSLayoutConstraint.deactivate(profileHeaderView.avatarConstraints)
         NSLayoutConstraint.activate(finalConstraints)

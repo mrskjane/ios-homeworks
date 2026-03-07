@@ -12,7 +12,7 @@ final class FeedViewController: UIViewController {
         return stackView
     }()
     
-    private let firstButton: UIButton = {
+    private lazy var firstButton: UIButton = {
         var config = UIButton.Configuration.filled()
         config.title = "Показать первый пост"
         config.attributedTitle?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -20,10 +20,11 @@ final class FeedViewController: UIViewController {
         config.cornerStyle = .medium
         config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
         let button = UIButton(configuration: config)
+        button.addTarget(self, action: #selector(didTapFirstButton), for: .touchUpInside)
         return button
     }()
     
-    private let secondButton: UIButton = {
+    private lazy var secondButton: UIButton = {
         var config = UIButton.Configuration.filled()
         config.title = "Показать второй пост"
         config.attributedTitle?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -31,12 +32,12 @@ final class FeedViewController: UIViewController {
         config.cornerStyle = .medium
         config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
         let button = UIButton(configuration: config)
+        button.addTarget(self, action: #selector(didTapSecondButton), for: .touchUpInside)
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupActions()
         setupView()
         setupLayout()
     }
@@ -52,11 +53,6 @@ final class FeedViewController: UIViewController {
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
-    }
-    
-    private func setupActions() {
-        firstButton.addTarget(self, action: #selector(didTapFirstButton), for: .touchUpInside)
-        secondButton.addTarget(self, action: #selector(didTapSecondButton), for: .touchUpInside)
     }
     
     @objc func didTapFirstButton() {

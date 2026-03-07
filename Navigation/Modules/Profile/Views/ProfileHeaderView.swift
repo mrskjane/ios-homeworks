@@ -117,7 +117,7 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     
     @objc private func statusTextChanged(_ textField: UITextField) {
         guard statusTextField.layer.borderColor == UIColor.systemRed.cgColor else { return }
-            statusTextField.layer.borderColor = UIColor.black.cgColor
+        statusTextField.layer.borderColor = UIColor.black.cgColor
     }
     
     @objc private func didTapSetStatusButton() {

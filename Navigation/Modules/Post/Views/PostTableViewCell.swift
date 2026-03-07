@@ -7,7 +7,7 @@ class PostTableViewCell: UITableViewCell {
     var onTapImage: (() -> Void)?
     
     static var id = "PostCell"
-
+    
     private let authorLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
@@ -24,7 +24,7 @@ class PostTableViewCell: UITableViewCell {
         imageView.isUserInteractionEnabled = true
         return imageView
     }()
-
+    
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
@@ -32,7 +32,7 @@ class PostTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         return label
     }()
-
+    
     private let likesLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
@@ -40,7 +40,7 @@ class PostTableViewCell: UITableViewCell {
         label.isUserInteractionEnabled = true
         return label
     }()
-
+    
     private let viewsLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
@@ -71,15 +71,15 @@ class PostTableViewCell: UITableViewCell {
             postImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             postImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             postImageView.heightAnchor.constraint(equalTo: postImageView.widthAnchor),
-
+            
             descriptionLabel.topAnchor.constraint(equalTo: postImageView.bottomAnchor, constant: padding),
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-
+            
             likesLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: padding),
             likesLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             likesLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding),
-
+            
             viewsLabel.topAnchor.constraint(equalTo: likesLabel.topAnchor),
             viewsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             viewsLabel.bottomAnchor.constraint(equalTo: likesLabel.bottomAnchor)

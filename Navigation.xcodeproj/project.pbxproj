@@ -10,7 +10,6 @@
 		5C24892D2EE33EC50013D761 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C24892C2EE33EC50013D761 /* LogInViewController.swift */; };
 		5C59387B2EED36D000C6E92B /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C59387A2EED36D000C6E92B /* PostTableViewCell.swift */; };
 		5C629D0C2F10F10D005E4866 /* UIVeiw.addSubviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C629D0B2F10F0F2005E4866 /* UIVeiw.addSubviews.swift */; };
-		5C83FF602F54C1AE00418177 /* EmailValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C83FF5F2F54C1A300418177 /* EmailValidator.swift */; };
 		5C929CF02F4252F900C5B522 /* UIViewShake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C929CEF2F4252EE00C5B522 /* UIViewShake.swift */; };
 		5C929CF32F43429000C5B522 /* User.json in Resources */ = {isa = PBXBuildFile; fileRef = 5C929CF22F43429000C5B522 /* User.json */; };
 		5C929CF52F43431300C5B522 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C929CF42F43431300C5B522 /* User.swift */; };
@@ -38,7 +37,6 @@
 		5C27B8552ECB32DD00D965C4 /* Navigation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Navigation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C59387A2EED36D000C6E92B /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		5C629D0B2F10F0F2005E4866 /* UIVeiw.addSubviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIVeiw.addSubviews.swift; sourceTree = "<group>"; };
-		5C83FF5F2F54C1A300418177 /* EmailValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailValidator.swift; sourceTree = "<group>"; };
 		5C929CEF2F4252EE00C5B522 /* UIViewShake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewShake.swift; sourceTree = "<group>"; };
 		5C929CF22F43429000C5B522 /* User.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = User.json; sourceTree = "<group>"; };
 		5C929CF42F43431300C5B522 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -270,7 +268,6 @@
 			isa = PBXGroup;
 			children = (
 				5C929CF62F4343A900C5B522 /* AuthService.swift */,
-				5C83FF5F2F54C1A300418177 /* EmailValidator.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -379,7 +376,6 @@
 				5CE1EB422EF598D900425751 /* PhotosTableViewCell.swift in Sources */,
 				5CE1EB462EF9364100425751 /* PhotosCollectionViewCell.swift in Sources */,
 				5C929CF52F43431300C5B522 /* User.swift in Sources */,
-				5C83FF602F54C1AE00418177 /* EmailValidator.swift in Sources */,
 				5C929CFB2F4639D200C5B522 /* DetailedPostViewController.swift in Sources */,
 				5CF871B22ED1E479001EE926 /* AppDelegate.swift in Sources */,
 				5CE1EB442EF8372F00425751 /* PhotosViewController.swift in Sources */,

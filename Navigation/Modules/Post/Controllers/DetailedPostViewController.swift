@@ -11,18 +11,18 @@ class DetailedPostViewController: UIViewController {
         label.textColor = .black
         return label
     }()
-
+    
     private let viewsLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textColor = .black
         return label
     }()
-
+    
     private let scrollView: UIScrollView = UIScrollView()
     
     private let contentView: UIView = UIView()
-
+    
     private let authorLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
@@ -57,9 +57,6 @@ class DetailedPostViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        title = post.author
-        navigationItem.largeTitleDisplayMode = .never
         setupLayout()
         configure()
     }
@@ -71,13 +68,16 @@ class DetailedPostViewController: UIViewController {
     }
     
     private func configure() {
+        view.backgroundColor = .white
+        title = post.author
+        navigationItem.largeTitleDisplayMode = .never
         authorLabel.text = post.author
         postImageView.image = UIImage(named: post.image)
         detailedDescriptionLabel.text = post.detailedText
         likesLabel.text = "Likes: \(post.likes)"
         viewsLabel.text = "Views: \(post.views)"
     }
-
+    
     private func setupLayout() {
         view.addSubviews([scrollView])
         scrollView.addSubviews([contentView, authorLabel, postImageView, detailedDescriptionLabel, likesLabel, viewsLabel])
@@ -110,7 +110,7 @@ class DetailedPostViewController: UIViewController {
             
             likesLabel.topAnchor.constraint(equalTo: detailedDescriptionLabel.bottomAnchor, constant: padding),
             likesLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
-
+            
             viewsLabel.topAnchor.constraint(equalTo: likesLabel.topAnchor),
             viewsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             

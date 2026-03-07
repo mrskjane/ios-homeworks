@@ -94,6 +94,6 @@ final class PhotosTableViewCell: UITableViewCell {
     }
     
     @objc private func arrowTapped() {
-                self.delegate?.didTapPhotosArrow()
+        self.delegate?.didTapPhotosArrow()
     }
 }

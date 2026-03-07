@@ -59,20 +59,20 @@ final class LogInViewController: UIViewController {
         passwordTextField.addTarget(self, action: #selector(textFieldsChanged), for: .editingChanged)
         return passwordTextField
     }()
-
+    
     private let separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .lightGray
         view.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         return view
     }()
-
+    
     private lazy var logInButton: UIButton = {
         let loginTextField = UIButton(type: .system)
         loginTextField.setTitle("Log in", for: .normal)
         loginTextField.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         loginTextField.setTitleColor(.white, for: .normal)
-    
+        
         let bluePixelImage = UIImage(named: "blue_pixel")
         loginTextField.setBackgroundImage(bluePixelImage, for: .normal)
         loginTextField.layer.cornerRadius = 10
@@ -87,10 +87,10 @@ final class LogInViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 12)
         label.numberOfLines = 0
         label.isHidden = true
-
+        
         return label
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -142,7 +142,7 @@ final class LogInViewController: UIViewController {
             passwordHintLabel.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 8),
             passwordHintLabel.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             passwordHintLabel.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
-
+            
             logInButton.topAnchor.constraint(equalTo: passwordHintLabel.bottomAnchor, constant: 16),
             logInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             logInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -151,7 +151,7 @@ final class LogInViewController: UIViewController {
             logInButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
-
+    
     private func setupGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(tapGesture)
@@ -167,38 +167,73 @@ final class LogInViewController: UIViewController {
         alert.addAction(okAction)
         present(alert, animated: true, completion: nil)
     }
-
+    
     private func resetBorders() {
         stackView.layer.borderWidth = 0.5
         stackView.layer.borderColor = UIColor.lightGray.cgColor
         separatorView.backgroundColor = .lightGray
+        resetTextFieldBorder(loginTextField)
+        resetTextFieldBorder(passwordTextField)
+    }
+    
+    private func highlightTextField(_ textField: UITextField) {
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.systemRed.cgColor
+        textField.layer.cornerRadius = 10
+        textField.layer.masksToBounds = true
+    }
+    
+    private func resetTextFieldBorder(_ textField: UITextField) {
+        textField.layer.borderWidth = 0
+        textField.layer.borderColor = UIColor.clear.cgColor
+    }
+    
+    private func highlightStackBorder() {
+        stackView.layer.borderWidth = 1
+        stackView.layer.borderColor = UIColor.systemRed.cgColor
+        separatorView.backgroundColor = .systemRed
+    }
+    
+    private func showHint(_ text: String) {
+        passwordHintLabel.text = text
+        passwordHintLabel.isHidden = false
     }
     
     @objc private func logInButtonTapped() {
+        resetBorders()
+        passwordHintLabel.text = nil
+        passwordHintLabel.isHidden = true
+        
         do {
             try AuthService.shared.authorize(
                 login: loginTextField.text,
                 pass: passwordTextField.text
             )
             resetBorders()
+            passwordHintLabel.text = nil
             passwordHintLabel.isHidden = true
             let profileVC = ProfileViewController(posts: Post.makeMockPosts())
             navigationController?.pushViewController(profileVC, animated: true)
         } catch AuthError.bothEmpty {
-            stackView.shake()
-            stackView.layer.borderWidth = 1
-            stackView.layer.borderColor = UIColor.systemRed.cgColor
-            separatorView.backgroundColor = .systemRed
+            loginTextField.shake()
+            passwordTextField.shake()
+            highlightStackBorder()
+            showHint("Пустой логин и пароль")
         } catch AuthError.emptyLogin {
             loginTextField.shake()
+            highlightTextField(loginTextField)
+            showHint("Пустой логин")
         } catch AuthError.emptyPassword {
             passwordTextField.shake()
+            highlightTextField(passwordTextField)
+            showHint("Пустой пароль")
         } catch AuthError.invalidEmail {
             loginTextField.shake()
             showAlert(message: "Некорректный формат e-mail")
         } catch AuthError.shortPassword {
             passwordTextField.shake()
-            passwordHintLabel.isHidden = false
+            highlightTextField(passwordTextField)
+            showHint("Пароль должен содержать минимум 6 символов")
         } catch AuthError.wrongCredentials {
             showAlert(message: "Неверный логин или пароль")
         } catch {
@@ -209,6 +244,7 @@ final class LogInViewController: UIViewController {
     @objc private func textFieldsChanged() {
         resetBorders()
         if !passwordHintLabel.isHidden {
+            passwordHintLabel.text = nil
             passwordHintLabel.isHidden = true
         }
     }
@@ -216,7 +252,7 @@ final class LogInViewController: UIViewController {
     @objc private func hideKeyboard() {
         view.endEditing(true)
     }
-        
+    
     @objc private func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             scrollView.contentInset.bottom = keyboardSize.height
