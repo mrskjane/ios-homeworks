@@ -8,6 +8,23 @@ enum AuthError: Error {
     case shortPassword
     case invalidEmail
     case bothEmpty
+    
+    var description: String {
+        switch self {
+        case .bothEmpty:
+            return "Пустой логин и пароль"
+        case .emptyLogin:
+            return "Пустой логин"
+        case .emptyPassword:
+            return "Пустой пароль"
+        case .invalidEmail:
+            return "Некорректный формат e-mail"
+        case .shortPassword:
+            return "Пароль должен содержать минимум 6 символов"
+        case .wrongCredentials:
+            return "Неверный логин или пароль"
+        }
+    }
 }
 
 final class AuthService {

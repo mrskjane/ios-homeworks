@@ -66,6 +66,39 @@ final class LogInViewController: UIViewController {
         view.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         return view
     }()
+
+    private let stackErrorBorderView: UIView = {
+        let view = UIView()
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor.systemRed.cgColor
+        view.layer.cornerRadius = 10
+        view.isHidden = true
+        view.isUserInteractionEnabled = false
+        view.backgroundColor = .clear
+        return view
+    }()
+
+    private let loginErrorBorderView: UIView = {
+        let view = UIView()
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor.systemRed.cgColor
+        view.layer.cornerRadius = 10
+        view.isHidden = true
+        view.isUserInteractionEnabled = false
+        view.backgroundColor = .clear
+        return view
+    }()
+
+    private let passwordErrorBorderView: UIView = {
+        let view = UIView()
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor.systemRed.cgColor
+        view.layer.cornerRadius = 10
+        view.isHidden = true
+        view.isUserInteractionEnabled = false
+        view.backgroundColor = .clear
+        return view
+    }()
     
     private lazy var logInButton: UIButton = {
         let loginTextField = UIButton(type: .system)
@@ -115,7 +148,7 @@ final class LogInViewController: UIViewController {
     private func setupLayout() {
         view.addSubviews([scrollView])
         scrollView.addSubviews([contentView])
-        contentView.addSubviews([vkLogoImageView, stackView, passwordHintLabel, logInButton])
+        contentView.addSubviews([vkLogoImageView, stackView, passwordHintLabel, logInButton, stackErrorBorderView, loginErrorBorderView, passwordErrorBorderView])
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -138,6 +171,21 @@ final class LogInViewController: UIViewController {
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             stackView.heightAnchor.constraint(equalToConstant: 100),
+
+            stackErrorBorderView.topAnchor.constraint(equalTo: stackView.topAnchor),
+            stackErrorBorderView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            stackErrorBorderView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+            stackErrorBorderView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
+
+            loginErrorBorderView.topAnchor.constraint(equalTo: loginTextField.topAnchor),
+            loginErrorBorderView.leadingAnchor.constraint(equalTo: loginTextField.leadingAnchor),
+            loginErrorBorderView.trailingAnchor.constraint(equalTo: loginTextField.trailingAnchor),
+            loginErrorBorderView.bottomAnchor.constraint(equalTo: loginTextField.bottomAnchor),
+
+            passwordErrorBorderView.topAnchor.constraint(equalTo: passwordTextField.topAnchor),
+            passwordErrorBorderView.leadingAnchor.constraint(equalTo: passwordTextField.leadingAnchor),
+            passwordErrorBorderView.trailingAnchor.constraint(equalTo: passwordTextField.trailingAnchor),
+            passwordErrorBorderView.bottomAnchor.constraint(equalTo: passwordTextField.bottomAnchor),
             
             passwordHintLabel.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 8),
             passwordHintLabel.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
@@ -172,26 +220,25 @@ final class LogInViewController: UIViewController {
         stackView.layer.borderWidth = 0.5
         stackView.layer.borderColor = UIColor.lightGray.cgColor
         separatorView.backgroundColor = .lightGray
-        resetTextFieldBorder(loginTextField)
-        resetTextFieldBorder(passwordTextField)
+        stackErrorBorderView.isHidden = true
+        loginErrorBorderView.isHidden = true
+        passwordErrorBorderView.isHidden = true
     }
     
     private func highlightTextField(_ textField: UITextField) {
-        textField.layer.borderWidth = 1
-        textField.layer.borderColor = UIColor.systemRed.cgColor
-        textField.layer.cornerRadius = 10
-        textField.layer.masksToBounds = true
+        borderView(for: textField).isHidden = false
     }
     
-    private func resetTextFieldBorder(_ textField: UITextField) {
-        textField.layer.borderWidth = 0
-        textField.layer.borderColor = UIColor.clear.cgColor
+    private func shakeTextFieldBorder(_ textField: UITextField) {
+        borderView(for: textField).shake()
     }
     
     private func highlightStackBorder() {
-        stackView.layer.borderWidth = 1
-        stackView.layer.borderColor = UIColor.systemRed.cgColor
-        separatorView.backgroundColor = .systemRed
+        stackErrorBorderView.isHidden = false
+    }
+
+    private func borderView(for textField: UITextField) -> UIView {
+        textField == loginTextField ? loginErrorBorderView : passwordErrorBorderView
     }
     
     private func showHint(_ text: String) {
@@ -199,54 +246,55 @@ final class LogInViewController: UIViewController {
         passwordHintLabel.isHidden = false
     }
     
-    @objc private func logInButtonTapped() {
+    private func clearValidationState() {
         resetBorders()
         passwordHintLabel.text = nil
         passwordHintLabel.isHidden = true
+    }
+    
+    @objc private func logInButtonTapped() {
+        clearValidationState()
         
         do {
             try AuthService.shared.authorize(
                 login: loginTextField.text,
                 pass: passwordTextField.text
             )
-            resetBorders()
-            passwordHintLabel.text = nil
-            passwordHintLabel.isHidden = true
             let profileVC = ProfileViewController(posts: Post.makeMockPosts())
             navigationController?.pushViewController(profileVC, animated: true)
-        } catch AuthError.bothEmpty {
-            loginTextField.shake()
-            passwordTextField.shake()
-            highlightStackBorder()
-            showHint("Пустой логин и пароль")
-        } catch AuthError.emptyLogin {
-            loginTextField.shake()
-            highlightTextField(loginTextField)
-            showHint("Пустой логин")
-        } catch AuthError.emptyPassword {
-            passwordTextField.shake()
-            highlightTextField(passwordTextField)
-            showHint("Пустой пароль")
-        } catch AuthError.invalidEmail {
-            loginTextField.shake()
-            showAlert(message: "Некорректный формат e-mail")
-        } catch AuthError.shortPassword {
-            passwordTextField.shake()
-            highlightTextField(passwordTextField)
-            showHint("Пароль должен содержать минимум 6 символов")
-        } catch AuthError.wrongCredentials {
-            showAlert(message: "Неверный логин или пароль")
-        } catch {
-            showAlert(message: "Что-то пошло не так")
+        } catch let error {
+            guard let error = error as? AuthError else {
+                showAlert(message: "Что-то пошло не так")
+                return
+            }
+            
+            let shakeHandler: (UITextField) -> Void = { [self] textField in
+                highlightTextField(textField)
+                shakeTextFieldBorder(textField)
+                showHint(error.description)
+            }
+            
+            switch error {
+            case .bothEmpty:
+                highlightStackBorder()
+                stackErrorBorderView.shake()
+                showHint(error.description)
+            case .emptyLogin:
+                shakeHandler(loginTextField)
+            case .emptyPassword, .shortPassword:
+                shakeHandler(passwordTextField)
+            case .invalidEmail:
+                highlightTextField(loginTextField)
+                shakeTextFieldBorder(loginTextField)
+                fallthrough
+            case .wrongCredentials:
+                showAlert(message: error.description)
+            }
         }
     }
     
     @objc private func textFieldsChanged() {
-        resetBorders()
-        if !passwordHintLabel.isHidden {
-            passwordHintLabel.text = nil
-            passwordHintLabel.isHidden = true
-        }
+        clearValidationState()
     }
     
     @objc private func hideKeyboard() {
