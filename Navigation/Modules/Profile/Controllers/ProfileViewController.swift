@@ -153,20 +153,20 @@ extension ProfileViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.id, for: indexPath) as! PostTableViewCell
             let post = posts[indexPath.row]
             let postIndex = indexPath.row
-            cell.configure(with: post)
-            cell.onTapLikes = { [weak self, weak cell] in
+            cell.configure(with: post,
+                           onTapLikes: { [weak self, weak cell] in
                 guard let self = self, let cell = cell else { return }
                 self.posts[postIndex].likes += 1
                 cell.updateLikes(count: self.posts[postIndex].likes)
-            }
-            cell.onTapImage = { [weak self, weak cell] in
+            },
+                           onTapImage: { [weak self, weak cell] in
                 guard let self = self, let cell = cell else { return }
                 self.posts[postIndex].views += 1
                 let updatedPost = self.posts[postIndex]
                 cell.updateViews(count: self.posts[postIndex].views)
                 let detailedVC = DetailedPostViewController(post: updatedPost)
                 self.navigationController?.pushViewController(detailedVC, animated: true)
-            }
+            })
             return cell
         }
     }
