@@ -10,6 +10,12 @@
 		5C24892D2EE33EC50013D761 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C24892C2EE33EC50013D761 /* LogInViewController.swift */; };
 		5C59387B2EED36D000C6E92B /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C59387A2EED36D000C6E92B /* PostTableViewCell.swift */; };
 		5C629D0C2F10F10D005E4866 /* UIVeiw.addSubviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C629D0B2F10F0F2005E4866 /* UIVeiw.addSubviews.swift */; };
+		5C929CF02F4252F900C5B522 /* UIViewShake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C929CEF2F4252EE00C5B522 /* UIViewShake.swift */; };
+		5C929CF32F43429000C5B522 /* User.json in Resources */ = {isa = PBXBuildFile; fileRef = 5C929CF22F43429000C5B522 /* User.json */; };
+		5C929CF52F43431300C5B522 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C929CF42F43431300C5B522 /* User.swift */; };
+		5C929CF72F4343B500C5B522 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C929CF62F4343A900C5B522 /* AuthService.swift */; };
+		5C929CF92F44A1CB00C5B522 /* StatusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C929CF82F44A1BE00C5B522 /* StatusService.swift */; };
+		5C929CFB2F4639D200C5B522 /* DetailedPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C929CFA2F4639D200C5B522 /* DetailedPostViewController.swift */; };
 		5CE1EB422EF598D900425751 /* PhotosTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE1EB412EF598D900425751 /* PhotosTableViewCell.swift */; };
 		5CE1EB442EF8372F00425751 /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE1EB432EF8372F00425751 /* PhotosViewController.swift */; };
 		5CE1EB462EF9364100425751 /* PhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE1EB452EF9364100425751 /* PhotosCollectionViewCell.swift */; };
@@ -31,6 +37,12 @@
 		5C27B8552ECB32DD00D965C4 /* Navigation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Navigation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C59387A2EED36D000C6E92B /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		5C629D0B2F10F0F2005E4866 /* UIVeiw.addSubviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIVeiw.addSubviews.swift; sourceTree = "<group>"; };
+		5C929CEF2F4252EE00C5B522 /* UIViewShake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewShake.swift; sourceTree = "<group>"; };
+		5C929CF22F43429000C5B522 /* User.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = User.json; sourceTree = "<group>"; };
+		5C929CF42F43431300C5B522 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		5C929CF62F4343A900C5B522 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		5C929CF82F44A1BE00C5B522 /* StatusService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusService.swift; sourceTree = "<group>"; };
+		5C929CFA2F4639D200C5B522 /* DetailedPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedPostViewController.swift; sourceTree = "<group>"; };
 		5CE1EB412EF598D900425751 /* PhotosTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosTableViewCell.swift; sourceTree = "<group>"; };
 		5CE1EB432EF8372F00425751 /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		5CE1EB452EF9364100425751 /* PhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -78,6 +90,7 @@
 		5C629D082F10F092005E4866 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				5C929CEF2F4252EE00C5B522 /* UIViewShake.swift */,
 				5C629D0B2F10F0F2005E4866 /* UIVeiw.addSubviews.swift */,
 			);
 			path = Extensions;
@@ -97,6 +110,7 @@
 			children = (
 				5CF871A32ED1E479001EE926 /* Assets.xcassets */,
 				5CF871A52ED1E479001EE926 /* Info.plist */,
+				5C929CF22F43429000C5B522 /* User.json */,
 				5CF871A82ED1E479001EE926 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
@@ -107,6 +121,7 @@
 			children = (
 				5CF871A92ED1E479001EE926 /* Post.swift */,
 				5CE1EB472EFDC3A500425751 /* Photo.swift */,
+				5C929CF42F43431300C5B522 /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -114,8 +129,7 @@
 		5C629D132F127769005E4866 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
-				5CF871A42ED1E479001EE926 /* FeedViewController.swift */,
-				5C59387A2EED36D000C6E92B /* PostTableViewCell.swift */,
+				5C83FF642F55773400418177 /* Controllers */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -123,7 +137,8 @@
 		5C629D142F12778F005E4866 /* LogIn */ = {
 			isa = PBXGroup;
 			children = (
-				5C24892C2EE33EC50013D761 /* LogInViewController.swift */,
+				5C83FF6B2F5577CF00418177 /* Services */,
+				5C83FF6A2F5577C800418177 /* Controllers */,
 			);
 			path = LogIn;
 			sourceTree = "<group>";
@@ -131,8 +146,8 @@
 		5C629D152F1277C4005E4866 /* Photos */ = {
 			isa = PBXGroup;
 			children = (
-				5CE1EB432EF8372F00425751 /* PhotosViewController.swift */,
-				5CE1EB452EF9364100425751 /* PhotosCollectionViewCell.swift */,
+				5C83FF692F5577A500418177 /* Views */,
+				5C83FF682F55779D00418177 /* Controllers */,
 			);
 			path = Photos;
 			sourceTree = "<group>";
@@ -140,7 +155,7 @@
 		5C629D162F12780A005E4866 /* Info */ = {
 			isa = PBXGroup;
 			children = (
-				5CF871A62ED1E479001EE926 /* InfoViewController.swift */,
+				5C83FF652F55776200418177 /* Controllers */,
 			);
 			path = Info;
 			sourceTree = "<group>";
@@ -148,7 +163,8 @@
 		5C629D172F12781E005E4866 /* Post */ = {
 			isa = PBXGroup;
 			children = (
-				5CF871AA2ED1E479001EE926 /* PostViewController.swift */,
+				5C83FF672F55778800418177 /* Views */,
+				5C83FF662F55777F00418177 /* Controllers */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -166,12 +182,102 @@
 			path = Modules;
 			sourceTree = "<group>";
 		};
-		5CF871A12ED1E479001EE926 /* Profile */ = {
+		5C83FF612F5576A200418177 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5CF871A02ED1E479001EE926 /* ProfileViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		5C83FF622F5576B100418177 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				5CF8719F2ED1E479001EE926 /* ProfileHeaderView.swift */,
-				5CF871A02ED1E479001EE926 /* ProfileViewController.swift */,
 				5CE1EB412EF598D900425751 /* PhotosTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5C83FF632F5576B900418177 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				5C929CF82F44A1BE00C5B522 /* StatusService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		5C83FF642F55773400418177 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5CF871A42ED1E479001EE926 /* FeedViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		5C83FF652F55776200418177 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5CF871A62ED1E479001EE926 /* InfoViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		5C83FF662F55777F00418177 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5CF871AA2ED1E479001EE926 /* PostViewController.swift */,
+				5C929CFA2F4639D200C5B522 /* DetailedPostViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		5C83FF672F55778800418177 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5C59387A2EED36D000C6E92B /* PostTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5C83FF682F55779D00418177 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5CE1EB432EF8372F00425751 /* PhotosViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		5C83FF692F5577A500418177 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5CE1EB452EF9364100425751 /* PhotosCollectionViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5C83FF6A2F5577C800418177 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5C24892C2EE33EC50013D761 /* LogInViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		5C83FF6B2F5577CF00418177 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				5C929CF62F4343A900C5B522 /* AuthService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		5CF871A12ED1E479001EE926 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				5C83FF632F5576B900418177 /* Services */,
+				5C83FF622F5576B100418177 /* Views */,
+				5C83FF612F5576A200418177 /* Controllers */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -250,6 +356,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CF871AD2ED1E479001EE926 /* Assets.xcassets in Resources */,
+				5C929CF32F43429000C5B522 /* User.json in Resources */,
 				5CF871AF2ED1E479001EE926 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,18 +369,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CE1EB482EFDC3A500425751 /* Photo.swift in Sources */,
+				5C929CF02F4252F900C5B522 /* UIViewShake.swift in Sources */,
 				5CF871B02ED1E479001EE926 /* ProfileHeaderView.swift in Sources */,
 				5CF871B12ED1E479001EE926 /* ProfileViewController.swift in Sources */,
 				5C24892D2EE33EC50013D761 /* LogInViewController.swift in Sources */,
 				5CE1EB422EF598D900425751 /* PhotosTableViewCell.swift in Sources */,
 				5CE1EB462EF9364100425751 /* PhotosCollectionViewCell.swift in Sources */,
+				5C929CF52F43431300C5B522 /* User.swift in Sources */,
+				5C929CFB2F4639D200C5B522 /* DetailedPostViewController.swift in Sources */,
 				5CF871B22ED1E479001EE926 /* AppDelegate.swift in Sources */,
 				5CE1EB442EF8372F00425751 /* PhotosViewController.swift in Sources */,
 				5CF871B32ED1E479001EE926 /* FeedViewController.swift in Sources */,
 				5CF871B42ED1E479001EE926 /* InfoViewController.swift in Sources */,
 				5CF871B52ED1E479001EE926 /* Post.swift in Sources */,
+				5C929CF72F4343B500C5B522 /* AuthService.swift in Sources */,
 				5C59387B2EED36D000C6E92B /* PostTableViewCell.swift in Sources */,
 				5C629D0C2F10F10D005E4866 /* UIVeiw.addSubviews.swift in Sources */,
+				5C929CF92F44A1CB00C5B522 /* StatusService.swift in Sources */,
 				5CF871B62ED1E479001EE926 /* PostViewController.swift in Sources */,
 				5CF871B72ED1E479001EE926 /* SceneDelegate.swift in Sources */,
 			);

@@ -1,12 +1,11 @@
 
 import UIKit
 
-class PhotosCollectionViewCell: UICollectionViewCell {
-    private let photoImageView: UIImageView = {
+final class PhotosCollectionViewCell: UICollectionViewCell {
+    let photoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
-        
         return imageView
     }()
     
